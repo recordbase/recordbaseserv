@@ -1,0 +1,12 @@
+FROM codeallergy/ubuntu-golang as builder
+
+ARG VERSION
+ARG BUILD
+
+WORKDIR /go/src/github.com/recordbase/recordbaseserv
+ADD . .
+
+RUN go build -o /recordbase -v -ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
+
+CMD ["cat", "/recordbase"]
+
