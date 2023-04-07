@@ -30,29 +30,23 @@ import (
 )
 
 
-func (t *implAPIServer) updateMethod(ctx context.Context, methodName string, cmd *recordpb.Command) error {
+func (t *implAPIServer) updateMethod(ctx context.Context,  cmd *recordpb.Command) error {
 
-	return t.doWithRaft(ctx, methodName, func(ctx context.Context, r *raft.Raft) error {
+	return t.doWithRaft(ctx, func(ctx context.Context, r *raft.Raft) error {
 		_, err := t.applyCommand(ctx, r, cmd)
 		return err
 	})
 
 }
 
+func (t *implAPIServer) doWithRaft(ctx context.Context, cb func(ctx context.Context, r *raft.Raft) error) (err error) {
 
-func (t *implAPIServer) doWithRaft(ctx context.Context, methodName string, cb func(ctx context.Context, r *raft.Raft) error) (err error) {
+	r, ok := t.RaftServer.Raft()
+	if !ok {
+		return ErrRaftNotInitialized
+	}
 
-	return t.doAuthorized(ctx, methodName, func(ctx context.Context) error {
-
-		r, ok := t.RaftServer.Raft()
-		if !ok {
-			return ErrRaftNotInitialized
-		}
-
-		return cb(ctx, r)
-
-	})
-
+	return cb(ctx, r)
 }
 
 func (t *implAPIServer) doAuthorized(ctx context.Context, methodName string, cb func(ctx context.Context) error) (err error) {

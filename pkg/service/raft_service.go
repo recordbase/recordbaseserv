@@ -82,8 +82,16 @@ func (t *implRaftService) doApplyCommand(ctx context.Context, cmd *recordpb.Comm
 		return t.RecordService.UpdateRecord(ctx, cmd.UpdateReq)
 	case recordpb.CommandOperation_DELETE_OP:
 		return t.RecordService.DeleteRecord(ctx, cmd.DeleteReq)
-	case recordpb.CommandOperation_ADD_RANGE_OP:
+	case recordpb.CommandOperation_UPLOAD_FILE_OP:
+		return t.RecordService.UploadFile(ctx, cmd.UploadFileReq)
+	case recordpb.CommandOperation_DELETE_FILE_OP:
+		return t.RecordService.DeleteFile(ctx, cmd.DeleteFileReq)
+	case recordpb.CommandOperation_KEY_RANGE_OP:
 		return t.RecordService.AddKeyRange(ctx, cmd.KeyRange)
+	case recordpb.CommandOperation_MAP_PUT:
+		return t.RecordService.MapPut(ctx, cmd.MapPutReq)
+	case recordpb.CommandOperation_MAP_REMOVE:
+		return t.RecordService.MapRemove(ctx, cmd.MapRemoveReq)
 	default:
 		return &raftpb.Status{
 			Updated: false,

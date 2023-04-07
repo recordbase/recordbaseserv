@@ -15,7 +15,6 @@
 package service
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"github.com/codeallergy/raftpb"
@@ -55,7 +54,7 @@ func RecordService() api.RecordService {
 	return &implRecordService{}
 }
 
-func (t *implRecordService) GetRecord(ctx context.Context, tenant, primaryKey string, withFileContents bool) (entity *recordpb.RecordEntry, err error) {
+func (t *implRecordService) GetRecord(ctx context.Context, tenant, primaryKey string) (entity *recordpb.RecordEntry, err error) {
 
 	ctx = t.TransactionalManager.BeginTransaction(ctx, true)
 	defer func() {
@@ -69,19 +68,10 @@ func (t *implRecordService) GetRecord(ctx context.Context, tenant, primaryKey st
 		return nil, ErrNotFound
 	}
 
-	if withFileContents {
-		for _, fileInfo := range entity.Files {
-			fileInfo.Data, err = t.RecordStore.Get(ctx).ByKey("%s:file:%s:%s", tenant, primaryKey, digest256(fileInfo.Name)).ToBinary()
-			if err != nil {
-				return
-			}
-		}
-	}
-
 	return
 }
 
-func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute, key string, withFileContents bool) (entity *recordpb.RecordEntry, err error) {
+func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute, key string) (entity *recordpb.RecordEntry, err error) {
 
 	ctx = t.TransactionalManager.BeginTransaction(ctx, true)
 	defer func() {
@@ -100,7 +90,7 @@ func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute,
 		return nil, ErrNotFound
 	}
 
-	return t.GetRecord(ctx, tenant, primaryKey, withFileContents)
+	return t.GetRecord(ctx, tenant, primaryKey)
 }
 
 func (t *implRecordService) Search(ctx context.Context, tenant, attribute, key string, cb func(*recordpb.RecordEntry) bool) (err error) {
@@ -180,7 +170,7 @@ func (t *implRecordService) CreateRecord(ctx context.Context, request *recordpb.
 	}
 
 	record, err := t.newRecord(request.Tenant, status.Id,
-		request.Attributes, request.Tags, request.Columns, request.Files)
+		request.Attributes, request.Tags, request.Columns)
 	if err != nil {
 		return
 	}
@@ -192,8 +182,7 @@ func (t *implRecordService) CreateRecord(ctx context.Context, request *recordpb.
 func (t *implRecordService) newRecord(tenant, primaryKey string,
 	attributes []*recordpb.AttributeEntry,
 	tags []string,
-	columns []*recordpb.ColumnEntry,
-	files []*recordpb.FileEntry) (record *recordpb.RecordEntry, err error) {
+	columns []*recordpb.ColumnEntry) (record *recordpb.RecordEntry, err error) {
 
 	current := time.Now().Unix()
 
@@ -212,18 +201,12 @@ func (t *implRecordService) newRecord(tenant, primaryKey string,
 		return
 	}
 
-	files, err = NormalizeFiles(files, t.StripUnknownChars)
-	if err != nil {
-		return
-	}
-
 	record = &recordpb.RecordEntry{
 		Tenant:     tenant,
 		PrimaryKey: primaryKey,
 		Attributes: attributes,
 		Tags:       tags,
 		Columns:    columns,
-		Files:      files,
 		CreatedAt:  current,
 		UpdatedAt:  current,
 	}
@@ -312,7 +295,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 
 		var record *recordpb.RecordEntry
 		record, err = t.newRecord(request.Tenant, request.PrimaryKey,
-			request.Attributes, request.Tags, request.Columns, request.Files)
+			request.Attributes, request.Tags, request.Columns)
 		if err != nil {
 			return
 		}
@@ -462,90 +445,62 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 			}
 		}
 	}
-	
-	/**
-	Update Files
-	*/
-	var preparingFiles []*recordpb.FileEntry
-	existingFiles := filesMap(record.Files)
-	requestFiles := make(map[string]bool)
-
-	for _, item := range request.Files {
-		if requestFiles[item.Name] {
-			if t.IgnoreDuplicateEntries {
-				continue
-			} else {
-				return nil, errors.Errorf("duplicate file '%s' in the record", item.Name)
-			}
-		}
-		requestFiles[item.Name] = true
-
-		itemKey := digest256(item.Name)
-		if existingFile, ok := existingFiles[item.Name]; ok {
-			// replace file value is different
-			existingData, err := t.RecordStore.Get(ctx).ByKey("%s:file:%s:%s", record.Tenant, record.PrimaryKey, itemKey).ToBinary()
-			if err != nil {
-				return status, err
-			}
-
-			if !bytes.Equal(existingData, item.Data) {
-
-				err := t.RecordStore.Set(ctx).ByKey("%s:file:%s:%s", record.Tenant, record.PrimaryKey, itemKey).Binary(item.Data)
-				if err != nil {
-					return status, err
-				}
-
-				existingFile.CreatedAt = time.Now().Unix()
-			}
-
-			preparingFiles = append(preparingFiles, existingFile)
-
-		} else {
-			// add file
-
-			err := t.RecordStore.Set(ctx).ByKey("%s:file:%s:%s", record.Tenant, record.PrimaryKey, itemKey).Binary(item.Data)
-			if err != nil {
-				return status, err
-			}
-
-			item.Data = nil
-			item.CreatedAt = time.Now().Unix()
-
-			preparingFiles = append(preparingFiles, item)
-		}
-	}
-
-	for _, existingFile := range record.Files {
-		if !requestFiles[existingFile.Name] {
-
-			switch request.UpdateType {
-			case recordpb.UpdateType_MERGE:
-				// keep it
-				preparingFiles = append(preparingFiles, existingFile)
-			case recordpb.UpdateType_REPLACE:
-				// remove it
-				err := t.RecordStore.Remove(ctx).ByKey("%s:file:%s:%s", record.Tenant, record.PrimaryKey, digest256(existingFile.Name)).Do()
-				if err != nil {
-					return status, err
-				}
-
-			default:
-				return status, errors.Errorf("unknown update type '%s'", request.UpdateType.String())
-
-			}
-
-		}
-	}
 
 	record.Attributes = preparingAttributes
 	record.Tags = preparingTags
 	record.Columns = preparingColumns
-	record.Files = preparingFiles
 	record.UpdatedAt = time.Now().Unix()
 
 	status.Updated = true
 	status.Id = request.PrimaryKey
 	return status, t.RecordStore.Set(ctx).ByKey("%s:rec:%s", record.Tenant, record.PrimaryKey).Proto(record)
+
+}
+
+func (t *implRecordService) DownloadFile(ctx context.Context, tenant, primaryKey, fileName string, cb func(*recordpb.FileContent) bool) error {
+
+	itemKey := digest256(fileName)
+	chunk := 0
+
+	for {
+		existingData, err := t.RecordStore.Get(ctx).ByKey("%s:file:%s:%s:%d", tenant, primaryKey, itemKey, chunk).ToBinary()
+		if err != nil {
+			return err
+		}
+
+		if existingData != nil {
+			if !cb(&recordpb.FileContent{Data: existingData}) {
+				return nil
+			}
+		}
+
+		chunk++
+	}
+
+	return nil
+}
+
+func (t *implRecordService) MapGet(ctx context.Context, tenant, primaryKey, mapKey string) (entry *recordpb.MapEntry, err error) {
+
+	entry = new(recordpb.MapEntry)
+	err = t.RecordStore.Set(ctx).ByKey("%s:map:%s:%s", tenant, primaryKey, mapKey).Proto(entry)
+	return
+}
+
+func (t *implRecordService) MapRange(ctx context.Context, tenant, primaryKey string, cb func(entry *recordpb.MapEntry) bool) error {
+
+	return t.RecordStore.
+		Enumerate(ctx).
+		ByPrefix("%s:map:%s:", tenant, primaryKey).
+		DoProto(func() proto.Message {
+		    return new(recordpb.MapEntry)
+	    },
+	    func(entry *store.ProtoEntry) bool {
+			if e, ok := entry.Value.(*recordpb.MapEntry); ok {
+				return cb(e)
+			}
+			return true
+	    })
 
 }
 
@@ -624,6 +579,143 @@ func (t *implRecordService) DeleteRecord(ctx context.Context, request *recordpb.
 	return
 }
 
+func (t *implRecordService) UploadFile(ctx context.Context, request *recordpb.UploadFileRequest) (status *raftpb.Status, err error) {
+
+	status = new(raftpb.Status)
+
+	ctx = t.TransactionalManager.BeginTransaction(ctx, false)
+	defer func() {
+		err = t.TransactionalManager.EndTransaction(ctx, err)
+	}()
+
+	itemKey := digest256(request.FileName)
+	if request.Data != nil {
+		err = t.RecordStore.Set(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, request.Chunk).Binary(request.Data)
+	} else {
+		err = t.RecordStore.Remove(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, request.Chunk).Do()
+	}
+
+	if request.Last {
+
+		chunk := request.Chunk + 1
+
+		for {
+			var existingData []byte
+			existingData, err = t.RecordStore.Get(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, chunk).ToBinary()
+			if err != nil {
+				return
+			}
+
+			if existingData != nil {
+				err = t.RecordStore.Remove(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, chunk).Do()
+				if err != nil {
+					return
+				}
+			}
+
+			chunk++
+		}
+
+	}
+
+	record := new(recordpb.RecordEntry)
+	err = t.RecordStore.Get(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).ToProto(record)
+	if err != nil {
+		return
+	}
+
+	if record.PrimaryKey != "" {
+
+		var updatingFile *recordpb.FileEntry
+		for _, entry := range record.Files {
+			if entry.Name == request.FileName {
+				updatingFile = entry
+				break
+			}
+		}
+
+		if updatingFile == nil || request.Chunk == 0 {
+
+			createdAt := time.Now().Unix()
+			if updatingFile != nil {
+				createdAt = updatingFile.CreatedAt
+			}
+
+			updatingFile = &recordpb.FileEntry{
+				Name:      request.FileName,
+				Size:      int32(len(request.Data)),
+				CreatedAt: createdAt,
+				UpdatedAt: time.Now().Unix(),
+				DeletedAt: 0,
+			}
+			record.Files = append(record.Files, updatingFile)
+		} else {
+			updatingFile.Size += int32(len(request.Data))
+			updatingFile.UpdatedAt = time.Now().Unix()
+		}
+
+		record.UpdatedAt = time.Now().Unix()
+		err = t.RecordStore.Set(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).Proto(record)
+	}
+
+	status.Updated = true
+	return
+
+}
+
+func (t *implRecordService) DeleteFile(ctx context.Context, request *recordpb.DeleteFileRequest) (status *raftpb.Status, err error) {
+
+	status = new(raftpb.Status)
+
+	ctx = t.TransactionalManager.BeginTransaction(ctx, false)
+	defer func() {
+		err = t.TransactionalManager.EndTransaction(ctx, err)
+	}()
+
+	itemKey := digest256(request.FileName)
+	chunk := 0
+
+	for {
+		var existingData []byte
+		existingData, err = t.RecordStore.Get(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, chunk).ToBinary()
+		if err != nil {
+			return
+		}
+
+		if existingData != nil {
+			err = t.RecordStore.Remove(ctx).ByKey("%s:file:%s:%s:%d", request.Tenant, request.PrimaryKey, itemKey, chunk).Do()
+			if err != nil {
+				return
+			}
+		}
+
+		chunk++
+	}
+
+	record := new(recordpb.RecordEntry)
+	err = t.RecordStore.Get(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).ToProto(record)
+	if err != nil {
+		return
+	}
+
+	if record.PrimaryKey != "" {
+
+		for _, entry := range record.Files {
+			if entry.Name == request.FileName {
+				entry.DeletedAt = time.Now().Unix()
+			}
+		}
+
+		record.UpdatedAt = time.Now().Unix()
+		err = t.RecordStore.Set(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).Proto(record)
+
+	}
+	
+	status.Updated = true
+	return
+
+}
+
 func (t *implRecordService) AddKeyRange(ctx context.Context, in *recordpb.KeyRange) (status *raftpb.Status, err error) {
 
 	status = new(raftpb.Status)
@@ -652,6 +744,20 @@ func (t *implRecordService) AddKeyRange(ctx context.Context, in *recordpb.KeyRan
 	err = t.RecordStore.Set(ctx).ByKey("%s:keyrange", in.Tenant).Proto(entity)
 	return
 
+}
+
+func (t *implRecordService) MapPut(ctx context.Context, req *recordpb.MapPutRequest) (status *raftpb.Status, err error) {
+	return &raftpb.Status{
+		Updated: true,
+	},
+	t.RecordStore.Set(ctx).ByKey("%s:map:%s:%s", req.Tenant, req.PrimaryKey, req.MapKey).Binary(req.Value)
+}
+
+func (t *implRecordService) MapRemove(ctx context.Context, req *recordpb.MapRemoveRequest) (status *raftpb.Status, err error) {
+	return &raftpb.Status{
+		Updated: true,
+	},
+	t.RecordStore.Remove(ctx).ByKey("%s:map:%s:%s", req.Tenant, req.PrimaryKey, req.MapKey).Do()
 }
 
 func (t *implRecordService) GetKeyCapacity(ctx context.Context, tenant string) (cap *recordpb.KeyCapacity, err error) {

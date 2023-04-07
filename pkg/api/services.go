@@ -27,13 +27,19 @@ type RecordService interface {
 
 	GetCounts(ctx context.Context, tenant string) (*recordpb.Counts, error)
 
-	GetRecord(ctx context.Context, tenant, userId string, withFileContents bool) (*recordpb.RecordEntry, error)
+	GetRecord(ctx context.Context, tenant, primaryKey string) (*recordpb.RecordEntry, error)
 
-	LookupRecord(ctx context.Context, tenant, attribute, key string, withFileContents bool) (*recordpb.RecordEntry, error)
+	LookupRecord(ctx context.Context, tenant, attribute, primaryKey string) (*recordpb.RecordEntry, error)
 
-	Search(ctx context.Context, tenant, attribute, key string, cb func(*recordpb.RecordEntry) bool) error
+	Search(ctx context.Context, tenant, attribute, primaryKey string, cb func(*recordpb.RecordEntry) bool) error
 
 	Scan(ctx context.Context, tenant, prefix string, offset, limit int, cb func(*recordpb.RecordEntry) bool) error
+
+	DownloadFile(ctx context.Context, tenant, primaryKey, fileName string, cb func(*recordpb.FileContent) bool) error
+
+	MapGet(ctx context.Context, tenant, primaryKey, mapKey string) (*recordpb.MapEntry, error)
+
+	MapRange(ctx context.Context, tenant, primaryKey string, cb func(entry *recordpb.MapEntry) bool) error
 
 	/**
 	Raft update methods
@@ -45,7 +51,15 @@ type RecordService interface {
 
 	DeleteRecord(ctx context.Context, request *recordpb.DeleteRequest) (*raftpb.Status, error)
 
+	UploadFile(ctx context.Context, request *recordpb.UploadFileRequest) (*raftpb.Status, error)
+
+	DeleteFile(ctx context.Context, request *recordpb.DeleteFileRequest) (*raftpb.Status, error)
+
 	AddKeyRange(ctx context.Context, in *recordpb.KeyRange) (*raftpb.Status, error)
+
+	MapPut(ctx context.Context, request *recordpb.MapPutRequest) (*raftpb.Status, error)
+
+	MapRemove(ctx context.Context, request *recordpb.MapRemoveRequest) (*raftpb.Status, error)
 
 	/**
 	ID allocation

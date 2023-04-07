@@ -55,10 +55,10 @@ type implAPIServer struct {
 	Tls            bool     `value:"api-grpc-server.tls,default=false"`
 	GrpcAddress    string   `value:"api-grpc-server.listen-address,default="`
 
-	Properties            glue.Properties                  `inject`
+	Properties              glue.Properties                `inject`
 	AuthorizationMiddleware sprint.AuthorizationMiddleware `inject`
-	NodeService           sprint.NodeService               `inject`
-	UserService           api.RecordService                `inject`
+	NodeService             sprint.NodeService             `inject`
+	RecordService           api.RecordService              `inject`
 
 	RaftServer            raftapi.RaftServer      `inject`
 	RaftClientPool        raftapi.RaftClientPool  `inject`

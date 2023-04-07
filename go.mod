@@ -16,7 +16,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/hashicorp/raft v1.3.11
 	github.com/pkg/errors v0.9.1
-	github.com/recordbase/recordpb v1.0.2
+	github.com/recordbase/recordpb v1.0.10
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
