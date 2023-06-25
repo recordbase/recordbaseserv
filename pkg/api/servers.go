@@ -16,7 +16,7 @@ package api
 
 import (
 	"github.com/codeallergy/glue"
-	"github.com/codeallergy/sprint"
+	"github.com/sprintframework/sprint"
 	"reflect"
 )
 

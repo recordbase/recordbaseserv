@@ -18,7 +18,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/recordbase/recordpb"
-	"github.com/codeallergy/store"
+	"github.com/orderedstore/store"
 	"strings"
 )
 

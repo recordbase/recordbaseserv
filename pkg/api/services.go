@@ -16,7 +16,7 @@ package api
 
 import (
 	"context"
-	"github.com/codeallergy/raftpb"
+	"github.com/openraft/raftpb"
 	"github.com/recordbase/recordpb"
 	"reflect"
 )

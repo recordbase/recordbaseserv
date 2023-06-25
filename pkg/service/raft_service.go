@@ -16,9 +16,9 @@ package service
 
 import (
 	"context"
-	"github.com/codeallergy/raftapi"
-	"github.com/codeallergy/raftpb"
-	"github.com/codeallergy/store"
+	"github.com/openraft/raftapi"
+	"github.com/openraft/raftpb"
+	"github.com/orderedstore/store"
 	"github.com/recordbase/recordpb"
 	"github.com/recordbase/recordbaseserv/pkg/api"
 	"github.com/hashicorp/raft"

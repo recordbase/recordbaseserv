@@ -17,7 +17,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/codeallergy/store"
+	"github.com/orderedstore/store"
 	"github.com/recordbase/recordpb"
 	"go.uber.org/zap"
 	"strings"

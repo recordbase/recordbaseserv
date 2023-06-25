@@ -16,7 +16,7 @@ package service
 
 import (
 	"context"
-	"github.com/codeallergy/sprintframework/pkg/util"
+	"github.com/sprintframework/sprintframework/pkg/util"
 	"github.com/recordbase/recordpb"
 )
 

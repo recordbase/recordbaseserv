@@ -4,19 +4,19 @@ go 1.17
 
 require (
 	github.com/codeallergy/glue v1.0.2
-	github.com/codeallergy/raftapi v1.0.4
-	github.com/codeallergy/raftgrpc v1.0.8
-	github.com/codeallergy/raftmod v1.0.6
-	github.com/codeallergy/raftpb v1.0.3
-	github.com/codeallergy/sprint v1.0.8
-	github.com/codeallergy/sprintframework v1.0.9
-	github.com/codeallergy/store v1.0.3
 	github.com/go-errors/errors v1.4.2
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/hashicorp/raft v1.3.11
+	github.com/openraft/raftapi v1.1.0
+	github.com/openraft/raftgrpc v1.1.0
+	github.com/openraft/raftmod v1.1.0
+	github.com/openraft/raftpb v1.1.0
+	github.com/orderedstore/store v1.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/recordbase/recordpb v1.0.10
+	github.com/recordbase/recordpb v1.1.0
+	github.com/sprintframework/sprint v1.1.0
+	github.com/sprintframework/sprintframework v1.1.0
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
@@ -29,15 +29,10 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/codeallergy/badgerstore v1.0.3 // indirect
 	github.com/codeallergy/base62 v1.0.0 // indirect
-	github.com/codeallergy/boltstore v1.0.3 // indirect
-	github.com/codeallergy/cachestore v1.0.3 // indirect
 	github.com/codeallergy/properties v1.0.0 // indirect
-	github.com/codeallergy/raftbadger v1.0.0 // indirect
 	github.com/codeallergy/seal v1.0.0 // indirect
 	github.com/codeallergy/sealmod v1.0.0 // indirect
-	github.com/codeallergy/sprintpb v1.0.1 // indirect
 	github.com/codeallergy/uuid v1.0.1 // indirect
 	github.com/dgraph-io/badger/v3 v3.2103.5 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
@@ -66,7 +61,12 @@ require (
 	github.com/miekg/dns v1.1.50 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/openraft/raftbadger v1.1.0 // indirect
+	github.com/orderedstore/badgerstore v1.1.0 // indirect
+	github.com/orderedstore/boltstore v1.1.0 // indirect
+	github.com/orderedstore/cachestore v1.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/sprintframework/sprintpb v1.1.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect

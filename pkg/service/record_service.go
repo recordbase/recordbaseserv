@@ -17,8 +17,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/codeallergy/raftpb"
-	"github.com/codeallergy/store"
+	"github.com/openraft/raftpb"
+	"github.com/orderedstore/store"
 	"github.com/recordbase/recordpb"
 	"github.com/recordbase/recordbaseserv/pkg/api"
 	"github.com/go-errors/errors"

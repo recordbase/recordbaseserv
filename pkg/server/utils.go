@@ -16,8 +16,8 @@ package server
 
 import (
 	"context"
-	"github.com/codeallergy/raftapi"
-	"github.com/codeallergy/raftpb"
+	"github.com/openraft/raftapi"
+	"github.com/openraft/raftpb"
 	"github.com/recordbase/recordpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/hashicorp/raft"
