@@ -52,7 +52,7 @@ github.com/openraft/raftpb,https://github.com/openraft/raftpb/blob/v1.1.0/LICENS
 github.com/orderedstore/badgerstore,https://github.com/orderedstore/badgerstore/blob/v1.1.0/LICENSE,Apache-2.0
 github.com/orderedstore/boltstore,https://github.com/orderedstore/boltstore/blob/v1.1.0/LICENSE,Apache-2.0
 github.com/orderedstore/cachestore,https://github.com/orderedstore/cachestore/blob/v1.1.0/LICENSE,Apache-2.0
-github.com/orderedstore/store,https://github.com/orderedstore/store/blob/v1.1.0/LICENSE,Apache-2.0
+github.com/keyvalstore/store,https://github.com/keyvalstore/store/blob/v1.1.0/LICENSE,Apache-2.0
 github.com/patrickmn/go-cache,https://github.com/patrickmn/go-cache/blob/v2.1.0/LICENSE,MIT
 github.com/pkg/errors,https://github.com/pkg/errors/blob/v0.9.1/LICENSE,BSD-2-Clause
 github.com/recordbase/recordbaseserv,https://github.com/recordbase/recordbaseserv/blob/HEAD/LICENSE,Apache-2.0

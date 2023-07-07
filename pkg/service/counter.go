@@ -18,7 +18,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/recordbase/recordpb"
-	"github.com/orderedstore/store"
+	"github.com/keyvalstore/store"
 	"strings"
 )
 

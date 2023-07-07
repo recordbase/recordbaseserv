@@ -21,7 +21,7 @@ import (
 	"github.com/openraft/raftapi"
 	"github.com/sprintframework/sprint"
 	"github.com/sprintframework/sprintframework/pkg/util"
-	"github.com/orderedstore/store"
+	"github.com/keyvalstore/store"
 	"github.com/recordbase/recordpb"
 	"github.com/recordbase/recordbaseserv/pkg/api"
 	"github.com/recordbase/recordbaseserv/pkg/pb"

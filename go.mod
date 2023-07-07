@@ -8,15 +8,15 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/hashicorp/raft v1.3.11
-	github.com/openraft/raftapi v1.1.0
-	github.com/openraft/raftgrpc v1.1.0
-	github.com/openraft/raftmod v1.1.0
+	github.com/keyvalstore/store v1.2.0
+	github.com/openraft/raftapi v1.1.1
+	github.com/openraft/raftgrpc v1.1.1
+	github.com/openraft/raftmod v1.1.1
 	github.com/openraft/raftpb v1.1.0
-	github.com/orderedstore/store v1.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordpb v1.1.0
-	github.com/sprintframework/sprint v1.1.0
-	github.com/sprintframework/sprintframework v1.1.0
+	github.com/sprintframework/sprint v1.1.1
+	github.com/sprintframework/sprintframework v1.1.1
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
@@ -55,6 +55,9 @@ require (
 	github.com/huin/goupnp v1.0.3 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/keyvalstore/badgerstore v1.2.0 // indirect
+	github.com/keyvalstore/boltstore v1.2.0 // indirect
+	github.com/keyvalstore/cachestore v1.2.0 // indirect
 	github.com/klauspost/compress v1.16.0 // indirect
 	github.com/likexian/whois v1.14.2 // indirect
 	github.com/mailgun/mailgun-go/v4 v4.8.1 // indirect
@@ -62,9 +65,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/openraft/raftbadger v1.1.0 // indirect
-	github.com/orderedstore/badgerstore v1.1.0 // indirect
-	github.com/orderedstore/boltstore v1.1.0 // indirect
-	github.com/orderedstore/cachestore v1.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/sprintframework/sprintpb v1.1.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
