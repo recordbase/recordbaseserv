@@ -2,7 +2,7 @@
 
 Recordbase Server is the simple key-value server that uses Raft protocol for communication between nodes.
 
-![build workflow](https://github.com/recordbase/recordbase/actions/workflows/build.yaml/badge.svg)
+![build workflow](https://github.com/recordbase/recordbaseserv/actions/workflows/build.yaml/badge.svg)
 
 # Build
 

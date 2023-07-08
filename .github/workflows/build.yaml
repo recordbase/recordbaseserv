@@ -1,4 +1,4 @@
-name:  SprintFramework CI
+name:  Recordbase CI
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Install Protoc
         uses: arduino/setup-protoc@v2
         with:
-          version: "v3.20.3"
+          version: "3.20"
 
       - name: Verify protoc
         run: protoc --version
