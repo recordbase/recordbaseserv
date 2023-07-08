@@ -6,7 +6,16 @@ ARG BUILD
 WORKDIR /go/src/github.com/recordbase/recordbaseserv
 ADD . .
 
-RUN go build -o /recordbase -v -ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
+ENV GONOSUMDB github.com
 
-CMD ["cat", "/recordbase"]
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive \
+    apt-get install --no-install-recommends --assume-yes \
+    autoconf automake libtool curl make g++ unzip
+
+RUN bash .github/scripts/install-protoc.sh 3.20.3
+RUN make deps
+RUN make
+
+CMD ["cat", "recordbase"]
 

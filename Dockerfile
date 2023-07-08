@@ -8,12 +8,19 @@ ADD . .
 
 ENV GONOSUMDB github.com
 
-RUN go build -o /recordbase -v -ldflags "-X main.Version=$(VERSION) -X main.Build=$(BUILD)"
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive \
+    apt-get install --no-install-recommends --assume-yes \
+    autoconf automake libtool curl make g++ unzip
+
+RUN bash .github/scripts/install-protoc.sh 3.20.3
+RUN make deps
+RUN make
 
 FROM ubuntu:18.04
 WORKDIR /app/bin
 
-COPY --from=builder /recordbase .
+COPY --from=builder /go/src/github.com/recordbase/recordbaseserv/recordbase .
 
 EXPOSE 8080 8443 8444
 

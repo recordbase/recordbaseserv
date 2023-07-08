@@ -6,6 +6,7 @@ ssl/
 
 rsrc.syso
 
+recordbase
 recordbase_darwin
 recordbase_linux
 recordbase_arm64_linux

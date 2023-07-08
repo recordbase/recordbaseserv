@@ -13,11 +13,12 @@ version:
 	@echo $(TAG)
 
 deps:
-	go install github.com/codeallergy/go-bindata/go-bindata@v1.0.0
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
-	go install github.com/grpc-ecosystem/grpc-gateway/v2@v2.15.2
-
+	go install \
+		github.com/codeallergy/go-bindata/go-bindata \
+		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+		google.golang.org/protobuf/cmd/protoc-gen-go \
+		google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 proto: version
 	rm -f *.swagger.json
@@ -31,7 +32,7 @@ build: bindata
 	rm -rf rsrc.syso
 	go mod tidy
 	go test -cover ./...
-	go build -o $(BIN)_darwin -v -ldflags "-X main.Version=$(VERSION) -X main.Build=$(NOW)"
+	go build -o $(BIN) -v -ldflags "-X main.Version=$(VERSION) -X main.Build=$(NOW)"
 
 generate:
 	npm run generate --prefix webapp
@@ -63,6 +64,7 @@ docker-run: docker
 	docker run -it -p 8080:8080 -p 8443:8443 --env PRECOOK_BOOT --env PRECOOK_AUTH $(REGISTRY)/$(IMAGE):$(TAG) /app/bin/template run
 
 docker-build:
+	mkdir -p $(TARGET)
 	rm -rf $(TARGET)/$(BIN)_linux
 	docker build --build-arg VERSION=$(VERSION) --build-arg BUILD=$(NOW) -t $(REGISTRY)/$(IMAGE):$(TAG)-build -f Dockerfile.build .
 	docker run --rm $(REGISTRY)/$(IMAGE):$(TAG)-build > $(TARGET)/$(BIN)_linux
