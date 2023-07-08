@@ -1,0 +1,33 @@
+name:  SprintFramework CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          version: "20.3"
+
+      - name: Verify protoc
+        run: protoc --version
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.17'
+
+      - name: Install dependencies
+        run: make deps
+
+      - name: Build
+        run: make

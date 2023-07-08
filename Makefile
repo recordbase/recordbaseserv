@@ -12,6 +12,13 @@ all: build
 version:
 	@echo $(TAG)
 
+deps:
+	go install github.com/codeallergy/go-bindata/go-bindata@v1.0.0
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
+	go install github.com/grpc-ecosystem/grpc-gateway/v2@v2.15.2
+
+
 proto: version
 	rm -f *.swagger.json
 	protoc proto/*.proto -I proto -I third_party -I $(GOPATH)/src/github.com/protocolbuffers/protobuf/src --go_out=. --go-grpc_out=. --grpc-gateway_out=logtostderr=true,allow_delete_body=true:. --openapiv2_out=logtostderr=true,allow_delete_body=true:.
