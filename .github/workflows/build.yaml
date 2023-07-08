@@ -15,9 +15,8 @@ jobs:
 
       - name: Install tools
         run: |
-          apt-get update \
-          apt-get install --no-install-recommends --assume-yes \
-          autoconf automake libtool curl make g++ unzip
+          apt-get update
+          apt-get install --assume-yes curl make unzip
 
       - name: Install protoc
         run: bash .github/scripts/install-protoc.sh 3.20.3
