@@ -22,17 +22,17 @@ import (
 	"strings"
 )
 
-func (t *implRecordService) GetCounts(ctx context.Context, tenant string) (resp *recordpb.Counts, err error) {
+func (t *implRecordService) GetInfo(ctx context.Context, tenant string) (resp *recordpb.Info, err error) {
 
 	prefix := fmt.Sprintf("%s:cnt:", tenant)
 
-	resp = new(recordpb.Counts)
+	resp = new(recordpb.Info)
 	err = t.RecordStore.
 		Enumerate(ctx).
 		ByPrefix(prefix).
 		DoCounters(func(entry *store.CounterEntry) bool {
 			groupAndName := strings.TrimPrefix(string(entry.Key), prefix)
-			parts := strings.Split(groupAndName, ":")
+			parts := strings.SplitN(groupAndName, ":", 1)
 			if len(parts) == 2 {
 				switch parts[0] {
 				case "attr":
@@ -45,8 +45,8 @@ func (t *implRecordService) GetCounts(ctx context.Context, tenant string) (resp 
 						Name:  parts[1],
 						Count: int64(entry.Value),
 					})
-				case "col":
-					resp.Columns = append(resp.Columns, &recordpb.CountEntry {
+				case "bin":
+					resp.Bins = append(resp.Bins, &recordpb.CountEntry {
 						Name:  parts[1],
 						Count: int64(entry.Value),
 					})

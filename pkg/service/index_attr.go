@@ -30,7 +30,7 @@ func (t *implRecordService) indexAttribute(ctx context.Context, tenant, primaryK
 		err = t.TransactionalManager.EndTransaction(ctx, err)
 	}()
 
-	digest := attributeDigest(attr.Name, attr.Value)
+	digest := digestAttribute(attr.Name, attr.Value)
 
 	// store primary index for lookup, not need to scan
 	err = t.RecordStore.Set(ctx).ByKey("%s:attr:%s", tenant, digest).String(primaryKey)
@@ -72,7 +72,7 @@ func (t *implRecordService) unindexAttribute(ctx context.Context, tenant, primar
 		err = t.TransactionalManager.EndTransaction(ctx, err)
 	}()
 
-	digest := attributeDigest(attr.Name, attr.Value)
+	digest := digestAttribute(attr.Name, attr.Value)
 
 	existing := new(recordpb.AttributeEntry)
 	err = t.RecordStore.Get(ctx).ByKey("%s:attr:%s:%s", tenant, digest, primaryKey).ToProto(existing)

@@ -20,80 +20,42 @@ import (
 	"strings"
 )
 
-func NormalizeAttributes(attributes []*recordpb.AttributeEntry, skipOnUnknown bool) ([]*recordpb.AttributeEntry, error) {
-
-	var out []*recordpb.AttributeEntry
+func NormalizeAttributes(attributes []*recordpb.AttributeEntry) ([]*recordpb.AttributeEntry, error) {
 
 	for _, attr := range attributes {
-
-		if val, err := NormalizePathField(attr.Name, skipOnUnknown); err != nil {
-			return nil, err
-		} else if val != "" {
-			attr.Name = val
-			out = append(out, attr)
-		}
-
+		attr.Name = strings.TrimSpace(attr.Name)
+		attr.Value = strings.TrimSpace(attr.Value)
 	}
 
-	return out, nil
+	return attributes, nil
 }
 
-func NormalizeTags(tags []string, skipOnUnknown bool) ([]string, error) {
-
-	var out []string
+func NormalizeTags(tags []string) ([]string, error) {
 
 	for _, tag := range tags {
-
-		if val, err := NormalizePathField(tag, skipOnUnknown); err != nil {
-			return nil, err
-		} else if val != "" {
-			out = append(out, tag)
-		}
-
+		tag = strings.TrimSpace(tag)
 	}
 
-	return out, nil
+	return tags, nil
 }
 
-func NormalizeColumns(columns []*recordpb.ColumnEntry, skipOnUnknown bool) ([]*recordpb.ColumnEntry, error) {
+func NormalizeBins(bins []*recordpb.BinEntry) ([]*recordpb.BinEntry, error) {
 
-	var out []*recordpb.ColumnEntry
-
-	for _, column := range columns {
-
-		if val, err := NormalizePathField(column.Name, skipOnUnknown); err != nil {
-			return nil, err
-		} else if val != "" {
-			column.Name = val
-			out = append(out, column)
-		}
-
+	for _, bin := range bins {
+		bin.Name = strings.TrimSpace(bin.Name)
 	}
 
-	return out, nil
+	return bins, nil
 
 }
 
-func NormalizeFiles(files []*recordpb.FileEntry, skipOnUnknown bool) ([]*recordpb.FileEntry, error) {
+func NormalizeFiles(files []*recordpb.FileEntry) ([]*recordpb.FileEntry, error) {
 
-	var out []*recordpb.FileEntry
-
-	for i, file := range files {
-
-		newName := strings.TrimSpace(file.Name)
-
-		if skipOnUnknown {
-			if newName != "" {
-				file.Name = newName
-				out = append(out, file)
-			}
-		} else if newName != file.Name  {
-			return nil, errors.Errorf("file name has spaces '%v' on position %d", file.Name, i)
-		}
-
+	for _, file := range files {
+		file.Name = strings.TrimSpace(file.Name)
 	}
 
-	return out, nil
+	return files, nil
 
 }
 

@@ -27,8 +27,10 @@ func (t *implRecordService) indexTag(ctx context.Context, tenant, primaryKey, ta
 		err = t.TransactionalManager.EndTransaction(ctx, err)
 	}()
 
+	digest := digestTag(tag)
+
 	existing := new(recordpb.TagEntry)
-	err = t.RecordStore.Get(ctx).ByKey("%s:tag:%s:%s", tenant, tag, primaryKey).ToProto(existing)
+	err = t.RecordStore.Get(ctx).ByKey("%s:tag:%s:%s", tenant, digest, primaryKey).ToProto(existing)
 	if err != nil {
 		return
 	}
@@ -52,7 +54,7 @@ func (t *implRecordService) indexTag(ctx context.Context, tenant, primaryKey, ta
 	}
 
 	existing.Tag = tag
-	return t.RecordStore.Set(ctx).ByKey("%s:tag:%s:%s", tenant, tag, primaryKey).Proto(existing)
+	return t.RecordStore.Set(ctx).ByKey("%s:tag:%s:%s", tenant, digest, primaryKey).Proto(existing)
 }
 
 func (t *implRecordService) unindexTag(ctx context.Context, tenant, primaryKey, tag string) (err error) {
@@ -62,8 +64,10 @@ func (t *implRecordService) unindexTag(ctx context.Context, tenant, primaryKey, 
 		err = t.TransactionalManager.EndTransaction(ctx, err)
 	}()
 
+	digest := digestTag(tag)
+
 	existing := new(recordpb.TagEntry)
-	err = t.RecordStore.Get(ctx).ByKey("%s:tag:%s:%s", tenant, tag, primaryKey).ToProto(existing)
+	err = t.RecordStore.Get(ctx).ByKey("%s:tag:%s:%s", tenant, digest, primaryKey).ToProto(existing)
 	if err != nil {
 		return
 	}
@@ -84,7 +88,7 @@ func (t *implRecordService) unindexTag(ctx context.Context, tenant, primaryKey, 
 		return err
 	}
 
-	return t.RecordStore.Remove(ctx).ByKey("%s:tag:%s:%s", tenant, tag, primaryKey).Do()
+	return t.RecordStore.Remove(ctx).ByKey("%s:tag:%s:%s", tenant, digest, primaryKey).Do()
 
 }
 

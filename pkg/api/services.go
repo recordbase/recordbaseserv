@@ -25,7 +25,7 @@ var RecordServiceClass = reflect.TypeOf((*RecordService)(nil)).Elem()
 
 type RecordService interface {
 
-	GetCounts(ctx context.Context, tenant string) (*recordpb.Counts, error)
+	GetInfo(ctx context.Context, tenant string) (*recordpb.Info, error)
 
 	GetRecord(ctx context.Context, tenant, primaryKey string) (*recordpb.RecordEntry, error)
 
@@ -40,6 +40,8 @@ type RecordService interface {
 	MapGet(ctx context.Context, tenant, primaryKey, mapKey string) (*recordpb.MapEntry, error)
 
 	MapRange(ctx context.Context, tenant, primaryKey string, cb func(entry *recordpb.MapEntry) bool) error
+
+	BinGet(ctx context.Context, tenant, primaryKey, binName string) (*recordpb.BinEntry, error)
 
 	/**
 	Raft update methods
@@ -60,6 +62,10 @@ type RecordService interface {
 	MapPut(ctx context.Context, request *recordpb.MapPutRequest) (*raftpb.Status, error)
 
 	MapRemove(ctx context.Context, request *recordpb.MapRemoveRequest) (*raftpb.Status, error)
+
+	BinPut(ctx context.Context, request *recordpb.BinPutRequest) (*raftpb.Status, error)
+
+	BinRemove(ctx context.Context, request *recordpb.BinRemoveRequest) (*raftpb.Status, error)
 
 	/**
 	ID allocation

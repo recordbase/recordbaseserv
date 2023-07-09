@@ -15,7 +15,7 @@ require (
 	github.com/openraft/raftmod v1.1.1
 	github.com/openraft/raftpb v1.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/recordbase/recordpb v1.1.0
+	github.com/recordbase/recordpb v1.1.1
 	github.com/sprintframework/sprint v1.1.1
 	github.com/sprintframework/sprintframework v1.1.1
 	go.uber.org/zap v1.24.0

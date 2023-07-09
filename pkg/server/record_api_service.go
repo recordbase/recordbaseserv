@@ -23,11 +23,11 @@ import (
 	"io"
 )
 
-func (t *implAPIServer) GetCounts(ctx context.Context, req *recordpb.TenantRequest) (metadata *recordpb.Counts, err error) {
+func (t *implAPIServer) GetInfo(ctx context.Context, req *recordpb.TenantRequest) (metadata *recordpb.Info, err error) {
 
-	metadata = new(recordpb.Counts)
-	err = t.doAuthorized(ctx, "GetCounts", func(ctx context.Context) error {
-		metadata, err = t.RecordService.GetCounts(ctx, req.Tenant)
+	metadata = new(recordpb.Info)
+	err = t.doAuthorized(ctx, "GetInfo", func(ctx context.Context) error {
+		metadata, err = t.RecordService.GetInfo(ctx, req.Tenant)
 		return err
 	})
 
@@ -314,3 +314,42 @@ func (t *implAPIServer) MapRange(req *recordpb.MapRangeRequest, stream recordpb.
 
 }
 
+func (t *implAPIServer) BinGet(ctx context.Context, req *recordpb.BinGetRequest) (resp *recordpb.BinEntry, err error) {
+
+	resp = new(recordpb.BinEntry)
+	err = t.doAuthorized(ctx, "BinGet", func(ctx context.Context) error {
+		resp, err = t.RecordService.BinGet(ctx, req.Tenant, req.PrimaryKey, req.BinName)
+		return err
+	})
+
+	return
+}
+
+func (t *implAPIServer) BinPut(ctx context.Context, req *recordpb.BinPutRequest) (resp *emptypb.Empty, err error) {
+
+	return empty, t.doAuthorized(ctx, "BinPut", func(ctx context.Context) error {
+
+		cmd := &recordpb.Command{
+			Operation: recordpb.CommandOperation_BIN_PUT,
+			BinPutReq: req,
+		}
+
+		return t.updateMethod(ctx, cmd)
+
+	})
+}
+
+func (t *implAPIServer) BinRemove(ctx context.Context, req *recordpb.BinRemoveRequest) (resp *emptypb.Empty, err error) {
+
+	return empty, t.doAuthorized(ctx, "BinRemove", func(ctx context.Context) error {
+
+		cmd := &recordpb.Command{
+			Operation: recordpb.CommandOperation_BIN_REMOVE,
+			BinRemoveReq: req,
+		}
+
+		return t.updateMethod(ctx, cmd)
+
+	})
+
+}

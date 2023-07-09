@@ -71,6 +71,23 @@ func (t *implRecordService) GetRecord(ctx context.Context, tenant, primaryKey st
 	return
 }
 
+func (t *implRecordService) BinGet(ctx context.Context, tenant, primaryKey, binName string) (*recordpb.BinEntry, error) {
+
+	record := new(recordpb.RecordEntry)
+	err := t.RecordStore.Get(ctx).ByKey("%s:rec:%s", tenant, primaryKey).ToProto(record)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, bin := range record.Bins {
+		if bin.Name == binName {
+			return bin, nil
+		}
+	}
+
+	return nil, ErrNotFound
+}
+
 func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute, key string) (entity *recordpb.RecordEntry, err error) {
 
 	ctx = t.TransactionalManager.BeginTransaction(ctx, true)
@@ -78,7 +95,7 @@ func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute,
 		err = t.TransactionalManager.EndTransaction(ctx, err)
 	}()
 
-	digest := attributeDigest(attribute, key)
+	digest := digestAttribute(attribute, key)
 
 	var primaryKey string
 	primaryKey, err = t.RecordStore.Get(ctx).ByKey("%s:attr:%s", tenant, digest).ToString()
@@ -95,7 +112,7 @@ func (t *implRecordService) LookupRecord(ctx context.Context, tenant, attribute,
 
 func (t *implRecordService) Search(ctx context.Context, tenant, attribute, key string, cb func(*recordpb.RecordEntry) bool) (err error) {
 
-	digest := attributeDigest(attribute, key)
+	digest := digestAttribute(attribute, key)
 
 	prefix := fmt.Sprintf("%s:attr:%s:", tenant, digest)
 	var processingErr error
@@ -170,7 +187,7 @@ func (t *implRecordService) CreateRecord(ctx context.Context, request *recordpb.
 	}
 
 	record, err := t.newRecord(request.Tenant, status.Id,
-		request.Attributes, request.Tags, request.Columns)
+		request.Attributes, request.Tags, request.Bins)
 	if err != nil {
 		return
 	}
@@ -182,21 +199,21 @@ func (t *implRecordService) CreateRecord(ctx context.Context, request *recordpb.
 func (t *implRecordService) newRecord(tenant, primaryKey string,
 	attributes []*recordpb.AttributeEntry,
 	tags []string,
-	columns []*recordpb.ColumnEntry) (record *recordpb.RecordEntry, err error) {
+	bins []*recordpb.BinEntry) (record *recordpb.RecordEntry, err error) {
 
 	current := time.Now().Unix()
 
-	attributes, err = NormalizeAttributes(attributes, t.StripUnknownChars)
+	attributes, err = NormalizeAttributes(attributes)
 	if err != nil {
 		return
 	}
 
-	tags, err = NormalizeTags(tags, t.StripUnknownChars)
+	tags, err = NormalizeTags(tags)
 	if err != nil {
 		return
 	}
 
-	columns, err = NormalizeColumns(columns, t.StripUnknownChars)
+	bins, err = NormalizeBins(bins)
 	if err != nil {
 		return
 	}
@@ -206,7 +223,7 @@ func (t *implRecordService) newRecord(tenant, primaryKey string,
 		PrimaryKey: primaryKey,
 		Attributes: attributes,
 		Tags:       tags,
-		Columns:    columns,
+		Bins:       bins,
 		CreatedAt:  current,
 		UpdatedAt:  current,
 	}
@@ -271,6 +288,23 @@ func (t *implRecordService) doCreateRecord(ctx context.Context, entity *recordpb
 		}
 	}
 
+	visited = make(map[string]bool)
+	for _, bin := range entity.Bins {
+		if visited[bin.Name] {
+			if t.IgnoreDuplicateEntries {
+				continue
+			} else {
+				return errors.Errorf("duplicate bin '%s' in the record", bin.Name)
+			}
+		}
+		visited[bin.Name] = true
+
+		err = t.incrementCounter(ctx, entity.Tenant, "bin", bin.Name, 1)
+		if err != nil {
+			return err
+		}
+	}
+
 	return
 }
 
@@ -289,32 +323,33 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 		return
 	}
 
-	if record.PrimaryKey == "" {
+	if record.PrimaryKey == "" || record.DeletedAt > 0 {
+		return status, ErrNotFound
+	}
 
-		// nothing to merge, run create flow
-
-		var record *recordpb.RecordEntry
-		record, err = t.newRecord(request.Tenant, request.PrimaryKey,
-			request.Attributes, request.Tags, request.Columns)
+	/*
+	if record.DeletedAt > 0 {
+		status.Id = request.PrimaryKey
+		status.Updated = false
+		record = new(recordpb.RecordEntry)
+		err = t.RecordStore.Get(ctx).ByKey("%s:del:%s", request.Tenant, request.PrimaryKey).ToProto(record)
 		if err != nil {
 			return
 		}
-
-		status.Id = request.PrimaryKey
-		status.Updated = true
-		return status, t.doCreateRecord(ctx, record)
+		if record.PrimaryKey == "" {
+			return status, ErrNotFound
+		}
+		// record restored
+		record.DeletedAt = 0
 	}
-
-	if record.DeletedAt > 0 {
-		return status, ErrNotFound
-	}
+	*/
 
 	/**
 	Update Attributes
 	 */
 
 	var preparingAttributes []*recordpb.AttributeEntry
-	existingAttributes := attrMap(record.Attributes)
+	existingAttributes := mapAttributes(record.Attributes)
 	requestAttributes := make(map[string]bool)
 
 	for _, item := range request.Attributes {
@@ -375,7 +410,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 	*/
 
 	var preparingTags []string
-	existingTags := tagMap(record.Tags)
+	existingTags := mapTags(record.Tags)
 	requestTags := make(map[string]bool)
 
 	for _, tag := range request.Tags {
@@ -419,36 +454,56 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 	}
 
 	/**
-	Update Columns
+	Update Bins
 	*/
 
-	var preparingColumns []*recordpb.ColumnEntry
-	requestColumns := make(map[string]bool)
+	var preparingBins []*recordpb.BinEntry
+	existingBins := mapBins(record.Bins)
+	requestBins := make(map[string]bool)
 
-	for _, item := range request.Columns {
-		if requestColumns[item.Name] {
+	for _, item := range request.Bins {
+		if requestBins[item.Name] {
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return nil, errors.Errorf("duplicate column '%s' in the record", item.Name)
+				return status, errors.Errorf("duplicate bin '%s' in the record", item.Name)
 			}
 		}
-		requestColumns[item.Name] = true
-		preparingColumns = append(preparingColumns, item)
+		requestBins[item.Name] = true
+
+		if !existingBins[item.Name] {
+			// increment counter
+			err = t.incrementCounter(ctx, record.Tenant, "bin", item.Name, 1)
+			if err != nil {
+				return status, errors.Errorf("increment index on bin '%s' in the record, %v", item.Name, err)
+			}
+		}
+
+		preparingBins = append(preparingBins, item)
 	}
 
-	for _, existingColumn := range record.Columns {
-		if !requestColumns[existingColumn.Name] {
-			if request.UpdateType == recordpb.UpdateType_MERGE {
+	for _, existingBin := range record.Bins {
+		if !requestBins[existingBin.Name] {
+
+			switch request.UpdateType {
+			case recordpb.UpdateType_MERGE:
 				// keep it
-				preparingColumns = append(preparingColumns, existingColumn)
+				preparingBins = append(preparingBins, existingBin)
+			case recordpb.UpdateType_REPLACE:
+				// decrement counter
+				err = t.incrementCounter(ctx, record.Tenant, "bin", existingBin.Name, -1)
+				if err != nil {
+					return status, errors.Errorf("decrement index on bin '%s' in the record, %v", existingBin.Name, err)
+				}
+			default:
+				return status, errors.Errorf("unknown update type '%s'", request.UpdateType.String())
 			}
 		}
 	}
 
 	record.Attributes = preparingAttributes
 	record.Tags = preparingTags
-	record.Columns = preparingColumns
+	record.Bins = preparingBins
 	record.UpdatedAt = time.Now().Unix()
 
 	status.Updated = true
@@ -456,6 +511,84 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 	return status, t.RecordStore.Set(ctx).ByKey("%s:rec:%s", record.Tenant, record.PrimaryKey).Proto(record)
 
 }
+
+func (t *implRecordService) BinPut(ctx context.Context, request *recordpb.BinPutRequest) (status *raftpb.Status, err error) {
+
+	request.BinName = strings.TrimSpace(request.BinName)
+	status = new(raftpb.Status)
+
+	ctx = t.TransactionalManager.BeginTransaction(ctx, false)
+	defer func() {
+		err = t.TransactionalManager.EndTransaction(ctx, err)
+	}()
+
+	record := new(recordpb.RecordEntry)
+	err = t.RecordStore.Get(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).ToProto(record)
+	if err != nil {
+		return
+	}
+
+	if record.PrimaryKey == "" || record.DeletedAt > 0 {
+		return status, ErrNotFound
+	}
+
+	for _, bin := range record.Bins {
+		if bin.Name == request.BinName {
+			bin.Value = request.Value
+			status.Updated = true
+			break
+		}
+	}
+
+	if !status.Updated {
+		record.Bins = append(record.Bins, &recordpb.BinEntry{
+			Name:  request.BinName,
+			Value: request.Value,
+		})
+		status.Updated = true
+	}
+
+	return status, t.RecordStore.Set(ctx).ByKey("%s:rec:%s", record.Tenant, record.PrimaryKey).Proto(record)
+
+}
+
+func (t *implRecordService) BinRemove(ctx context.Context, request *recordpb.BinRemoveRequest) (status *raftpb.Status, err error) {
+
+	request.BinName = strings.TrimSpace(request.BinName)
+	status = new(raftpb.Status)
+
+	ctx = t.TransactionalManager.BeginTransaction(ctx, false)
+	defer func() {
+		err = t.TransactionalManager.EndTransaction(ctx, err)
+	}()
+
+	record := new(recordpb.RecordEntry)
+	err = t.RecordStore.Get(ctx).ByKey("%s:rec:%s", request.Tenant, request.PrimaryKey).ToProto(record)
+	if err != nil {
+		return
+	}
+
+	if record.PrimaryKey == "" || record.DeletedAt > 0 {
+		return status, ErrNotFound
+	}
+
+	var preparingBins []*recordpb.BinEntry
+	for _, bin := range record.Bins {
+		if bin.Name != request.BinName {
+			preparingBins = append(preparingBins, bin)
+		}
+	}
+
+	if len(preparingBins) == len(record.Bins) {
+		return status, nil
+	}
+
+	status.Updated = true
+	return status, t.RecordStore.Set(ctx).ByKey("%s:rec:%s", record.Tenant, record.PrimaryKey).Proto(record)
+
+}
+
+
 
 func (t *implRecordService) DownloadFile(ctx context.Context, tenant, primaryKey, fileName string, cb func(*recordpb.FileContent) bool) error {
 
@@ -543,6 +676,13 @@ func (t *implRecordService) DeleteRecord(ctx context.Context, request *recordpb.
 			return
 		}
 	}
+	for _, bin := range existing.Bins {
+		// decrement counter
+		err = t.incrementCounter(ctx, existing.Tenant, "bin", bin.Name, -1)
+		if err != nil {
+			return
+		}
+	}
 
 	ttlSeconds := t.DeleteGracePeriod * 24 * 3600
 
@@ -566,7 +706,7 @@ func (t *implRecordService) DeleteRecord(ctx context.Context, request *recordpb.
 
 	existing.Attributes = nil
 	existing.Tags = nil
-	existing.Columns = nil
+	existing.Bins = nil
 	existing.Files = nil
 
 	// keep some attributes and store permanently
@@ -748,6 +888,7 @@ func (t *implRecordService) AddKeyRange(ctx context.Context, in *recordpb.KeyRan
 
 func (t *implRecordService) MapPut(ctx context.Context, req *recordpb.MapPutRequest) (status *raftpb.Status, err error) {
 	return &raftpb.Status{
+		Id: req.PrimaryKey,
 		Updated: true,
 	},
 	t.RecordStore.Set(ctx).ByKey("%s:map:%s:%s", req.Tenant, req.PrimaryKey, req.MapKey).Binary(req.Value)
@@ -755,10 +896,12 @@ func (t *implRecordService) MapPut(ctx context.Context, req *recordpb.MapPutRequ
 
 func (t *implRecordService) MapRemove(ctx context.Context, req *recordpb.MapRemoveRequest) (status *raftpb.Status, err error) {
 	return &raftpb.Status{
+		Id: req.PrimaryKey,
 		Updated: true,
 	},
 	t.RecordStore.Remove(ctx).ByKey("%s:map:%s:%s", req.Tenant, req.PrimaryKey, req.MapKey).Do()
 }
+
 
 func (t *implRecordService) GetKeyCapacity(ctx context.Context, tenant string) (cap *recordpb.KeyCapacity, err error) {
 
@@ -779,7 +922,7 @@ func (t *implRecordService) GetKeyCapacity(ctx context.Context, tenant string) (
 	return
 }
 
-func attrMap(list []*recordpb.AttributeEntry) map[string]*recordpb.AttributeEntry {
+func mapAttributes(list []*recordpb.AttributeEntry) map[string]*recordpb.AttributeEntry {
 	cache := make(map[string]*recordpb.AttributeEntry)
 	for _, item := range list {
 		cache[item.Name] = item
@@ -787,7 +930,7 @@ func attrMap(list []*recordpb.AttributeEntry) map[string]*recordpb.AttributeEntr
 	return cache
 }
 
-func tagMap(list []string) map[string]bool {
+func mapTags(list []string) map[string]bool {
 	cache := make(map[string]bool)
 	for _, item := range list {
 		cache[item] = true
@@ -795,18 +938,10 @@ func tagMap(list []string) map[string]bool {
 	return cache
 }
 
-func filesMap(list []*recordpb.FileEntry) map[string]*recordpb.FileEntry {
-	cache := make(map[string]*recordpb.FileEntry)
-	for _, item := range list {
-		cache[item.Name] = item
-	}
-	return cache
-}
-
-func indexStrings(list []string) map[string]bool {
+func mapBins(list []*recordpb.BinEntry) map[string]bool {
 	cache := make(map[string]bool)
-	for _, name := range list {
-		cache[name] = true
+	for _, item := range list {
+		cache[item.Name] = true
 	}
 	return cache
 }

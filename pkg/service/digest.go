@@ -20,8 +20,12 @@ import (
 	"fmt"
 )
 
-func attributeDigest(name, value string) string {
+func digestAttribute(name, value string) string {
 	return digest256(fmt.Sprintf("%s:%s", name, value))
+}
+
+func digestTag(tag string) string {
+	return digest256(tag)
 }
 
 func digest256(str string) string {
