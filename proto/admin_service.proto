@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2023 Zander Schwid & Co. LLC.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option go_package = "pkg/pb";
+option java_multiple_files = true;
+option java_package = "com.codeallergy";
+option java_outer_classname = "AdminProtos";
+option objc_class_prefix = "AP";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        title: "AdminService";
+        version: "1.0";
+        contact: {
+            name: "AdminService";
+            url: "https://github.com/recordbase/recordbaseserv";
+            email: "zander@schwid.com";
+        };
+    };
+    schemes: HTTP;
+    schemes: HTTPS;
+    consumes: "application/json";
+    consumes: "application/octet-stream";
+    produces: "application/json";
+    produces: "application/octet-stream";
+};
+
+package recordbase;
+
+
+//
+//  AdminService
+//
+
+service AdminService {
+
+    //
+    // Admin commands
+    //
+    rpc AdminRun(AdminCommand) returns (AdminCommandResult) {
+        option (google.api.http) = {
+            put: "/api/v1/admin/command"
+            body: "*"
+        };
+    }
+
+}
+
+message AdminCommand {
+    string  command = 1;
+    repeated string args = 2;
+}
+
+message AdminCommandResult {
+    string  content = 1;
+}

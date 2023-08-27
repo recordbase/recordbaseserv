@@ -1,0 +1,40 @@
+application:
+  package: "github.com/recordbase/recordbaseserv"
+  company: "codeallergy"
+  copyright: "Copyright (c) 2022 Zander Schwid & Co. LLC. All rights reserved."
+  nat: "off"
+  autoupdate: "on"
+  bootstrap-tokens: "boot"
+
+control-grpc-server:
+  listen-address: "127.0.0.1:8400"
+
+api-grpc-server:
+  listen-address: ":8500"
+
+api-grpc-client:
+  connect-address: "127.0.0.1:8500"
+
+api-gateway-server:
+  listen-address: ":8600"
+  options: "gateway;pages;assets"
+  use-proto-names: true
+
+raft-server:
+  listen-address: ":8900"
+  api-bean: "api-grpc-server"
+  raft-service-name: "userid.RaftService"
+
+raft-snapshot:
+  key-bean: "application.boot"
+
+raft-client:
+  scanner-name: "api"
+
+lumberjack:
+  rotate-on-start: true
+
+tls-config:
+  insecure: true
+
+
