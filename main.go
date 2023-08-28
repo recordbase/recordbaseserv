@@ -14,6 +14,10 @@ import (
 	"github.com/openraft/raftmod"
 	"github.com/openraft/raftgrpc"
 	"github.com/pkg/errors"
+	"github.com/sprintframework/certmod"
+	"github.com/sprintframework/dnsmod"
+	"github.com/sprintframework/natmod"
+	"github.com/sprintframework/sealmod"
 	"github.com/sprintframework/sprintframework/pkg/app"
 	sprintclient "github.com/sprintframework/sprintframework/pkg/client"
 	sprintcmd "github.com/sprintframework/sprintframework/pkg/cmd"
@@ -54,6 +58,10 @@ func doMain() (err error) {
 		app.WithBuild(Build),
 		app.Beans(app.DefaultApplicationBeans, AppResources, sprintcmd.DefaultCommands, raftgrpc.RaftCommand()),
 		app.Core(sprintcore.CoreScanner(
+			natmod.Scanner(),
+			dnsmod.Scanner(),
+			sealmod.Scanner(),
+			certmod.Scanner(),
 			sprintcore.BadgerStorageFactory("config-storage"),
 			sprintcore.BadgerStorageFactory("record-storage"),
 			sprintcore.BadgerStorageFactory("raft-storage"),
