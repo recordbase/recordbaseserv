@@ -10,9 +10,9 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/hashicorp/raft v1.5.0
 	github.com/keyvalstore/store v1.3.0
-	github.com/openraft/raftapi v1.2.1
-	github.com/openraft/raftgrpc v1.2.1
-	github.com/openraft/raftmod v1.2.1
+	github.com/openraft/raftapi v1.2.2
+	github.com/openraft/raftgrpc v1.2.2
+	github.com/openraft/raftmod v1.2.2
 	github.com/openraft/raftpb v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
@@ -20,8 +20,8 @@ require (
 	github.com/sprintframework/dnsmod v1.0.0
 	github.com/sprintframework/natmod v1.0.1
 	github.com/sprintframework/sealmod v1.0.0
-	github.com/sprintframework/sprint v1.3.0
-	github.com/sprintframework/sprintframework v1.3.0
+	github.com/sprintframework/sprint v1.3.1
+	github.com/sprintframework/sprintframework v1.3.1
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
