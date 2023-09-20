@@ -23,7 +23,8 @@ api-gateway-server:
 raft-server:
   listen-address: ":8900"
   advertise-address: ":8900"
-  api-bean: "api-grpc-server"
+  serf-address: ":8901"
+  rpc-bean: "api-grpc-server"
   raft-service-name: "recordbase.RaftService"
 
 raft-snapshot:

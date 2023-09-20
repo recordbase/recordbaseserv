@@ -9,10 +9,11 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/hashicorp/raft v1.5.0
+	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/keyvalstore/store v1.3.0
-	github.com/openraft/raftapi v1.2.2
+	github.com/openraft/raftapi v1.2.3
 	github.com/openraft/raftgrpc v1.2.2
-	github.com/openraft/raftmod v1.2.2
+	github.com/openraft/raftmod v1.2.6
 	github.com/openraft/raftpb v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
@@ -28,6 +29,8 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0
 	google.golang.org/protobuf v1.28.1
 )
+
+require go.uber.org/atomic v1.10.0 // indirect
 
 require (
 	github.com/armon/go-metrics v0.4.1 // indirect
@@ -49,14 +52,19 @@ require (
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/btree v1.0.0 // indirect
 	github.com/google/flatbuffers v23.1.21+incompatible // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.0.0 // indirect
 	github.com/hashicorp/go-msgpack v0.5.5 // indirect
+	github.com/hashicorp/go-multierror v1.1.0 // indirect
+	github.com/hashicorp/go-sockaddr v1.0.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
+	github.com/hashicorp/memberlist v0.5.0 // indirect
 	github.com/huin/goupnp v1.2.0 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -73,6 +81,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/openraft/raftbadger v1.2.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529 // indirect
 	github.com/sprintframework/cert v1.0.0 // indirect
 	github.com/sprintframework/certpb v1.0.0 // indirect
 	github.com/sprintframework/dns v1.0.0 // indirect
@@ -80,7 +89,6 @@ require (
 	github.com/sprintframework/seal v1.0.0 // indirect
 	github.com/sprintframework/sprintpb v1.3.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
 	golang.org/x/mod v0.8.0 // indirect
