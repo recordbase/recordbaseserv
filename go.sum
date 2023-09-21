@@ -930,6 +930,8 @@ github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213/go.mod h1:vNUNkEQ1
 github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod h1:CzGEWj7cYgsdH8dAjBGEr58BoE7ScuLd+fwFZ44+/x8=
 github.com/keyvalstore/badgerstore v1.3.0 h1:bgxpe38ibIcHqCcffUoEbuPuYARdLrU+RmRvNcZtNDU=
 github.com/keyvalstore/badgerstore v1.3.0/go.mod h1:fvgf9dHYioXiSVw+/wxrF77ftFZTOHySUAksRBhKUn4=
+github.com/keyvalstore/bboltstore v1.3.0 h1:DpPzgkzfgnb3lOuc9F4aMsBEkrspy+WHEf6Pg5gkBns=
+github.com/keyvalstore/bboltstore v1.3.0/go.mod h1:+4MPq53ZFt2TA8+y7zWVJCPGh4WqOIM6HqSP3MNkVRs=
 github.com/keyvalstore/boltstore v1.3.0 h1:0YfcxLWqw5g0/itxhJA8sGd6+KBxIGFpyvkYi/XoTFw=
 github.com/keyvalstore/boltstore v1.3.0/go.mod h1:YV1EaVeAaivx4czDAv9BpZ/eOBY/118n6fTN7MqcEnQ=
 github.com/keyvalstore/cachestore v1.3.0 h1:UpIbQT/jed+90USl+Rm2KDjkcHPsj1OIZfH3C/nb7Yo=
@@ -1066,8 +1068,8 @@ github.com/openraft/raftbadger v1.2.0 h1:D5e63IUoRfGlzn0aSw0rbV0nzZCS72zYCjT1Nf4
 github.com/openraft/raftbadger v1.2.0/go.mod h1:ZKqSvibUGibS1rj7YQbQbr0mHAdBzowo8SvWkmpnqOc=
 github.com/openraft/raftgrpc v1.2.2 h1:4v/3ARG84UK84Sky3HH5Sf0U/LPXdz3ohmKwBtLQ94E=
 github.com/openraft/raftgrpc v1.2.2/go.mod h1:ZLPXDq3faG0PaQw42SzghSbN01yx8VBbUy3/ePcrMuQ=
-github.com/openraft/raftmod v1.2.6 h1:hqoLLjaEv2KfVSMVZ3dvNRuCVbs6Fes8RmYwXXuQxvc=
-github.com/openraft/raftmod v1.2.6/go.mod h1:KSzJyHXzL5nN6jdXwUS1Y2J1FCK48cw/f48FkAi28QY=
+github.com/openraft/raftmod v1.2.7 h1:f/6QR1JlZs8yvZ0FfV/s1322fZWsgjdBH6gx6bIjuBw=
+github.com/openraft/raftmod v1.2.7/go.mod h1:gSxPAodtzma7ffeyFLdZ8hv/WVDHaa80mJ2gTT8s/gs=
 github.com/openraft/raftpb v1.2.0 h1:3qQ20PAAHJOuemdD9OtY31l4mWqJEywic6e7VA8b/iM=
 github.com/openraft/raftpb v1.2.0/go.mod h1:EbCGUOcYCXWqgEFNkcEixgQNOSrxH2S2OFa0Tbj4/GU=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
@@ -1188,10 +1190,11 @@ github.com/sprintframework/seal v1.0.0/go.mod h1:l5w6ahKXw86mhVadamzE9wdse+ewInx
 github.com/sprintframework/sealmod v1.0.0 h1:ePWvnRY/nk/aOj0y7f/KyT1ri7lLWnVhDzvRTOMxG7I=
 github.com/sprintframework/sealmod v1.0.0/go.mod h1:UgfvU896zYChGLGt22+UfjTZPvcYy6+jyl7NuC2X7po=
 github.com/sprintframework/sprint v1.3.0/go.mod h1:ssu7bTol76CG/yAEa2kDU990+4j3kNTCsGvowbIo6+I=
-github.com/sprintframework/sprint v1.3.1 h1:OUVFBhJ/dbgom4uoK831lE6rvGNf361cKL2w+xt/hAs=
 github.com/sprintframework/sprint v1.3.1/go.mod h1:ssu7bTol76CG/yAEa2kDU990+4j3kNTCsGvowbIo6+I=
-github.com/sprintframework/sprintframework v1.3.1 h1:srBmntwBQpDEBXXJT2bw4f8xaLFP0/PNy0FcJigVVCU=
-github.com/sprintframework/sprintframework v1.3.1/go.mod h1:B0hf2qjTzi3Z1F4E1chjtRx91J9D0lHhEO/oLEYkt5s=
+github.com/sprintframework/sprint v1.3.5 h1:mwpizoRr/UH6fTidEl3BzBN38GML6Qp8XZoq43j6EdA=
+github.com/sprintframework/sprint v1.3.5/go.mod h1:xRk082IbIpbiPrqGdE2/V4Y/JkQMdQck4TIfr5Hzaug=
+github.com/sprintframework/sprintframework v1.3.5 h1:cqc7cJawByxvT5NPldOB/RVRFVC5vECVtPV1LBOcdAc=
+github.com/sprintframework/sprintframework v1.3.5/go.mod h1:GZ89ZqN2WQzOB8UNNOFgRcFa980OLqNxZx84n4p5+xE=
 github.com/sprintframework/sprintpb v1.3.0 h1:QVdhSOprZWwgXhu9aBiNHBlnl42SflaU+MX5e24+yKo=
 github.com/sprintframework/sprintpb v1.3.0/go.mod h1:Cuk1DcfvNYTjWJ2xqutDZmRmhwN+FRrAYGkV5dT8mio=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -1241,6 +1244,9 @@ github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5t
 github.com/zeebo/assert v1.3.0/go.mod h1:Pq9JiuJQpG8JLJdtkwrJESF0Foym2/D9XMU5ciN/wJ0=
 github.com/zeebo/xxh3 v1.0.2/go.mod h1:5NWz9Sef7zIDm2JHfFlcQvNekmcEl9ekUZQQKCYaDcA=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
+go.etcd.io/bbolt v1.3.7 h1:j+zJOnnEjF/kyHlDDgGnVL/AIqIJPq8UoB2GSNfkUfQ=
+go.etcd.io/bbolt v1.3.7/go.mod h1:N9Mkw9X8x5fupy0IKsmuqVtoGDyxsaDlbk4Rd05IAQw=
+go.etcd.io/gofail v0.1.0/go.mod h1:VZBCXYGZhHAinaBiiqYvuDynvahNsAyLFwB3kEHKz1M=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=

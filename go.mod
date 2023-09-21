@@ -13,7 +13,7 @@ require (
 	github.com/keyvalstore/store v1.3.0
 	github.com/openraft/raftapi v1.2.3
 	github.com/openraft/raftgrpc v1.2.2
-	github.com/openraft/raftmod v1.2.6
+	github.com/openraft/raftmod v1.2.7
 	github.com/openraft/raftpb v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
@@ -21,8 +21,8 @@ require (
 	github.com/sprintframework/dnsmod v1.0.0
 	github.com/sprintframework/natmod v1.0.1
 	github.com/sprintframework/sealmod v1.0.0
-	github.com/sprintframework/sprint v1.3.1
-	github.com/sprintframework/sprintframework v1.3.1
+	github.com/sprintframework/sprint v1.3.5
+	github.com/sprintframework/sprintframework v1.3.5
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
@@ -69,6 +69,7 @@ require (
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/keyvalstore/badgerstore v1.3.0 // indirect
+	github.com/keyvalstore/bboltstore v1.3.0 // indirect
 	github.com/keyvalstore/boltstore v1.3.0 // indirect
 	github.com/keyvalstore/cachestore v1.3.0 // indirect
 	github.com/klauspost/compress v1.16.0 // indirect
@@ -88,6 +89,7 @@ require (
 	github.com/sprintframework/nat v1.0.0 // indirect
 	github.com/sprintframework/seal v1.0.0 // indirect
 	github.com/sprintframework/sprintpb v1.3.0 // indirect
+	go.etcd.io/bbolt v1.3.7 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
