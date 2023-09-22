@@ -7,8 +7,8 @@ package server
 
 import (
 	"context"
-	"github.com/openraft/raftapi"
-	"github.com/openraft/raftpb"
+	"github.com/sprintframework/raftapi"
+	"github.com/sprintframework/raftpb"
 	"github.com/recordbase/recordbasepb"
 	"github.com/golang/protobuf/proto"
 	"github.com/hashicorp/raft"

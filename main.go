@@ -8,12 +8,13 @@ package main
 import (
 	"fmt"
 	"github.com/codeallergy/glue"
-	"github.com/openraft/raftmod/raftcmd"
+	"github.com/openraft/raftgrpc"
+	"github.com/sprintframework/raftmod/raftcmd"
 	"github.com/recordbase/recordbaseserv/pkg/resources"
 	"github.com/recordbase/recordbaseserv/pkg/server"
 	"github.com/recordbase/recordbaseserv/pkg/service"
-	"github.com/openraft/raftmod"
-	"github.com/openraft/raftgrpc"
+	"github.com/sprintframework/raftmod"
+	//"github.com/openraft/raftgrpc"
 	"github.com/pkg/errors"
 	"github.com/sprintframework/certmod"
 	"github.com/sprintframework/dnsmod"
@@ -57,7 +58,7 @@ func doMain() (err error) {
 	return app.Application("recordbase",
 		app.WithVersion(Version),
 		app.WithBuild(Build),
-		app.Beans(app.DefaultApplicationBeans, AppResources, sprintcmd.DefaultCommands, raftgrpc.RaftCommand(), raftcmd.Scan),
+		app.Beans(app.DefaultApplicationBeans, AppResources, sprintcmd.DefaultCommands, /*raftgrpc.RaftCommand(), */raftcmd.Scan),
 		app.Core(sprintcore.CoreScanner(
 			natmod.Scanner(),
 			dnsmod.Scanner(),

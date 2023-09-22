@@ -2,9 +2,11 @@ module github.com/recordbase/recordbaseserv
 
 go 1.17
 
-replace github.com/openraft/raftmod => ../../openraft/raftmod
+replace github.com/sprintframework/raftmod => ../../sprintframework/raftmod
 
 replace github.com/hashicorp/serf => ../../hashicorp/serf
+
+replace github.com/sprintframework/sprintframework => ../../sprintframework/sprintframework
 
 require (
 	github.com/codeallergy/glue v1.1.0
@@ -15,18 +17,17 @@ require (
 	github.com/hashicorp/raft v1.5.0
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/keyvalstore/store v1.3.0
-	github.com/openraft/raftapi v1.2.4
-	github.com/openraft/raftgrpc v1.2.2
-	github.com/openraft/raftmod v1.2.9
-	github.com/openraft/raftpb v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
 	github.com/sprintframework/certmod v1.0.0
 	github.com/sprintframework/dnsmod v1.0.0
 	github.com/sprintframework/natmod v1.0.1
+	github.com/sprintframework/raftapi v1.2.10
+	github.com/sprintframework/raftmod v1.2.11-0.20230922215107-a2feda46b79e
+	github.com/sprintframework/raftpb v1.2.10
 	github.com/sprintframework/sealmod v1.0.0
-	github.com/sprintframework/sprint v1.3.5
-	github.com/sprintframework/sprintframework v1.3.6
+	github.com/sprintframework/sprint v1.3.7
+	github.com/sprintframework/sprintframework v1.3.7
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
@@ -35,6 +36,8 @@ require (
 )
 
 require go.uber.org/atomic v1.10.0 // indirect
+
+require github.com/openraft/raftgrpc v1.2.2
 
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
@@ -100,7 +103,8 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/openraft/raftbadger v1.2.0 // indirect
+	github.com/openraft/raftapi v1.2.5 // indirect
+	github.com/openraft/raftpb v1.2.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/posener/complete v1.2.3 // indirect
 	github.com/ryanuber/columnize v2.1.2+incompatible // indirect
@@ -111,6 +115,7 @@ require (
 	github.com/sprintframework/certpb v1.0.0 // indirect
 	github.com/sprintframework/dns v1.0.0 // indirect
 	github.com/sprintframework/nat v1.0.0 // indirect
+	github.com/sprintframework/raft-badger v1.2.2 // indirect
 	github.com/sprintframework/seal v1.0.0 // indirect
 	github.com/sprintframework/sprintpb v1.3.0 // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect

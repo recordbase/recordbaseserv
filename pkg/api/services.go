@@ -7,7 +7,7 @@ package api
 
 import (
 	"context"
-	"github.com/openraft/raftpb"
+	"github.com/sprintframework/raftpb"
 	"github.com/recordbase/recordbasepb"
 	"reflect"
 )

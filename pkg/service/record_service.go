@@ -8,7 +8,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/openraft/raftpb"
+	"github.com/sprintframework/raftpb"
 	"github.com/keyvalstore/store"
 	"github.com/recordbase/recordbasepb"
 	"github.com/recordbase/recordbaseserv/pkg/api"

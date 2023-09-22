@@ -10,7 +10,7 @@ import (
 	"crypto/tls"
 	"github.com/codeallergy/glue"
 	"github.com/keyvalstore/store"
-	"github.com/openraft/raftapi"
+	"github.com/sprintframework/raftapi"
 	"github.com/pkg/errors"
 	"github.com/recordbase/recordbaseserv/pkg/api"
 	"github.com/recordbase/recordbaseserv/pkg/pb"
