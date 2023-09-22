@@ -23,7 +23,6 @@ api-gateway-server:
 raft-server:
   listen-address: ":8900"
   advertise-address: ":8900"
-  serf-address: ":8901"
   rpc-bean: "api-grpc-server"
   raft-service-name: "recordbase.RaftService"
 
@@ -32,6 +31,10 @@ raft-snapshot:
 
 raft-client:
   scanner-name: "api"
+
+serf-server:
+  listen-address: ":8800"
+  rcp-address: "127.0.0.1:8700"
 
 lumberjack:
   rotate-on-start: true
