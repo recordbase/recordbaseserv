@@ -1077,13 +1077,6 @@ github.com/onsi/gomega v1.7.1/go.mod h1:XdKZgCCFLUoM/7CFJVPcG8C1xQ1AJ0vpAezJrB7J
 github.com/onsi/gomega v1.10.1/go.mod h1:iN09h71vgCQne3DLsj+A5owkum+a2tYe+TOCB1ybHNo=
 github.com/onsi/gomega v1.17.0/go.mod h1:HnhC7FXeEQY45zxNK3PPoIUhzk/80Xly9PcubAlGdZY=
 github.com/onsi/gomega v1.18.1/go.mod h1:0q+aL8jAiMXy9hbwj2mr5GziHiwhAIQpFmmtT5hitRs=
-github.com/openraft/raftapi v1.2.2/go.mod h1:voytZ6fiNInhEhKh7fhzV51kSlYVonEnwSseoyR7jYQ=
-github.com/openraft/raftapi v1.2.5 h1:wszb8CEcxNlbFroPB+qWHXr0VSw+C2wc5r+zFNe41uU=
-github.com/openraft/raftapi v1.2.5/go.mod h1:299NTUYYJlOmi8IiSbo+4N32l2lWhyqnRcrE00wiXz0=
-github.com/openraft/raftgrpc v1.2.2 h1:4v/3ARG84UK84Sky3HH5Sf0U/LPXdz3ohmKwBtLQ94E=
-github.com/openraft/raftgrpc v1.2.2/go.mod h1:ZLPXDq3faG0PaQw42SzghSbN01yx8VBbUy3/ePcrMuQ=
-github.com/openraft/raftpb v1.2.0 h1:3qQ20PAAHJOuemdD9OtY31l4mWqJEywic6e7VA8b/iM=
-github.com/openraft/raftpb v1.2.0/go.mod h1:EbCGUOcYCXWqgEFNkcEixgQNOSrxH2S2OFa0Tbj4/GU=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/oracle/oci-go-sdk v24.3.0+incompatible/go.mod h1:VQb79nF8Z2cwLkLS35ukwStZIg5F66tcBccjip/j888=
 github.com/ovh/go-ovh v1.1.0/go.mod h1:AxitLZ5HBRPyUd+Zl60Ajaag+rNTdVXWIkzfrVuTXWA=
@@ -1205,8 +1198,8 @@ github.com/sprintframework/natmod v1.0.1 h1:OJQt9nZqkEEfmX7MtJGt4wtYUHc4a7dNaHzl
 github.com/sprintframework/natmod v1.0.1/go.mod h1:WUX2POdXixAiyjy+QlcncssKjZcbw9IjZ3QG+WBd4cQ=
 github.com/sprintframework/raft-badger v1.2.2 h1:PXpzkjgdAf370ZyL5vnOJGMMpWb68dmwHWAeGvdlGY0=
 github.com/sprintframework/raft-badger v1.2.2/go.mod h1:czCG3yyEniwUi4RnJBGzyB9dZ38XaA4rEPGHAQo2RWI=
-github.com/sprintframework/raftapi v1.2.10 h1:/8qtvPDfaai+LBSmHS1Bgje4Qe9tvrESjT6+IGuJvlQ=
-github.com/sprintframework/raftapi v1.2.10/go.mod h1:be+cOg5krFiW3Vcj/oFBPQH9VuDNu7+VK6Tqo0UK+GM=
+github.com/sprintframework/raftapi v1.2.11 h1:EGOCZRwmr5jjz/3GcH1GnV/veljPadWAC2FO8XkLDMo=
+github.com/sprintframework/raftapi v1.2.11/go.mod h1:qx8AaLods0d6lCgaL0XJE8vQRWMkD5oEtYaa/2lMaC8=
 github.com/sprintframework/raftpb v1.2.10 h1:OdTGZTbLXfWZr40bj2eCTHhXH0dnvGIaqghCxRxAlP0=
 github.com/sprintframework/raftpb v1.2.10/go.mod h1:VgSWHBgozCJb0coqERTz+vIUxgQBNVR/UjrDdYCohu0=
 github.com/sprintframework/seal v1.0.0 h1:CItCNVbkyI98CrithyxO8zEPBYOvtVxVJZu+vplF9es=
@@ -1214,9 +1207,8 @@ github.com/sprintframework/seal v1.0.0/go.mod h1:l5w6ahKXw86mhVadamzE9wdse+ewInx
 github.com/sprintframework/sealmod v1.0.0 h1:ePWvnRY/nk/aOj0y7f/KyT1ri7lLWnVhDzvRTOMxG7I=
 github.com/sprintframework/sealmod v1.0.0/go.mod h1:UgfvU896zYChGLGt22+UfjTZPvcYy6+jyl7NuC2X7po=
 github.com/sprintframework/sprint v1.3.0/go.mod h1:ssu7bTol76CG/yAEa2kDU990+4j3kNTCsGvowbIo6+I=
-github.com/sprintframework/sprint v1.3.1/go.mod h1:ssu7bTol76CG/yAEa2kDU990+4j3kNTCsGvowbIo6+I=
-github.com/sprintframework/sprint v1.3.7 h1:0rZz5bfqOve0lgSilvYoatHV+1iFrDbNkNjVxLYtMKE=
-github.com/sprintframework/sprint v1.3.7/go.mod h1:xRk082IbIpbiPrqGdE2/V4Y/JkQMdQck4TIfr5Hzaug=
+github.com/sprintframework/sprint v1.3.8 h1:xt/Ie7KXHRPjA6FuqNZf1DrW9zEzIAXSnCQDtF7GIoU=
+github.com/sprintframework/sprint v1.3.8/go.mod h1:xRk082IbIpbiPrqGdE2/V4Y/JkQMdQck4TIfr5Hzaug=
 github.com/sprintframework/sprintpb v1.3.0 h1:QVdhSOprZWwgXhu9aBiNHBlnl42SflaU+MX5e24+yKo=
 github.com/sprintframework/sprintpb v1.3.0/go.mod h1:Cuk1DcfvNYTjWJ2xqutDZmRmhwN+FRrAYGkV5dT8mio=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

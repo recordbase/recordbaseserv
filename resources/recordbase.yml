@@ -7,33 +7,31 @@ application:
   bootstrap-tokens: "boot"
 
 control-grpc-server:
-  listen-address: "127.0.0.1:8400"
+  bind-address: "127.0.0.1:8400"
 
 api-grpc-server:
-  listen-address: ":8500"
+  bind-address: ":8500"
 
 api-grpc-client:
   connect-address: "127.0.0.1:8500"
 
 api-gateway-server:
-  listen-address: ":8600"
+  bind-address: ":8600"
   options: "gateway;pages;assets"
   use-proto-names: true
 
-raft-server:
-  listen-address: ":8900"
+raft:
+  bind-address: ":8900"
   advertise-address: ":8900"
-  rpc-bean: "api-grpc-server"
-  raft-service-name: "recordbase.RaftService"
-
-raft-snapshot:
-  key-bean: "application.boot"
+  rpc-bean-name: "api-grpc-server"
+  rpc-service-name: "recordbase.RaftService"
+  snapshot-key-bean: "application.boot"
 
 raft-client:
   scanner-name: "api"
 
-serf-server:
-  listen-address: ":8800"
+serf:
+  bind-address: ":8800"
   rcp-address: "127.0.0.1:8700"
 
 lumberjack:

@@ -44,7 +44,7 @@ type implAPIServer struct {
 	APIGatewayServer  *http.Server   `inject:"bean=api-gateway-server"`
 
 	Tls            bool     `value:"api-grpc-server.tls,default=false"`
-	GrpcAddress    string   `value:"api-grpc-server.listen-address,default="`
+	GrpcAddress    string   `value:"api-grpc-server.bind-address,default="`
 
 	Properties              glue.Properties                `inject`
 	AuthorizationMiddleware sprint.AuthorizationMiddleware `inject`
@@ -89,7 +89,7 @@ func (t *implAPIServer) PostConstruct() error {
 	opts = append(opts, grpc.WithTransportCredentials(tlsCredentials))
 
 	if t.GrpcAddress == "" {
-		return errors.New("property 'api-grpc-server.listen-address' is empty")
+		return errors.New("property 'api-grpc-server.bind-address' is empty")
 	}
 
 	recordbasepb.RegisterRecordServiceHandlerFromEndpoint(context.Background(), api, t.GrpcAddress, opts)

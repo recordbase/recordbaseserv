@@ -8,17 +8,15 @@ package main
 import (
 	"fmt"
 	"github.com/codeallergy/glue"
-	"github.com/openraft/raftgrpc"
-	"github.com/sprintframework/raftmod/raftcmd"
+	"github.com/pkg/errors"
 	"github.com/recordbase/recordbaseserv/pkg/resources"
 	"github.com/recordbase/recordbaseserv/pkg/server"
 	"github.com/recordbase/recordbaseserv/pkg/service"
-	"github.com/sprintframework/raftmod"
-	//"github.com/openraft/raftgrpc"
-	"github.com/pkg/errors"
 	"github.com/sprintframework/certmod"
 	"github.com/sprintframework/dnsmod"
 	"github.com/sprintframework/natmod"
+	"github.com/sprintframework/raftmod"
+	"github.com/sprintframework/raftmod/raftcmd"
 	"github.com/sprintframework/sealmod"
 	"github.com/sprintframework/sprintframework/pkg/app"
 	sprintclient "github.com/sprintframework/sprintframework/pkg/client"
@@ -66,7 +64,7 @@ func doMain() (err error) {
 			certmod.Scanner(),
 			sprintcore.BadgerStorageFactory("config-storage"),
 			sprintcore.BadgerStorageFactory("record-storage"),
-			sprintcore.BadgerStorageFactory("raft-storage"),
+			sprintcore.BadgerStorageFactory("raft-store"),
 			sprintcore.LumberjackFactory(),
 			sprintcore.AutoupdateService(),
 			service.Scan,
@@ -85,7 +83,7 @@ func doMain() (err error) {
 			sprintserver.GrpcServerFactory("api-grpc-server"),
 			server.APIServer(),
 			raftmod.Scan,
-			raftgrpc.RaftGrpcServer(),
+			//raftgrpc.RaftGrpcServer(),
 			sprintserver.HttpServerFactory("api-gateway-server"),
 			sprintserver.TlsConfigFactory("tls-config"),
 		)),
