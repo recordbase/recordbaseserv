@@ -1184,8 +1184,8 @@ github.com/spf13/viper v1.7.0/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5q
 github.com/spf13/viper v1.7.1/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5qpdg=
 github.com/sprintframework/cert v1.0.0 h1:fRIFSNEOKjU3kRxB15Q+kbqKZSI32yTc3eQoKY+Iz7c=
 github.com/sprintframework/cert v1.0.0/go.mod h1:AiIcC/EIQOUQPXQ6xKrwhuJaNKEnZvNOZSYGGM6Q4XE=
-github.com/sprintframework/certmod v1.0.0 h1:aGE0LOYDe3jvXeFbkF3LxKIKC6UGNBiYUaGynf9kMp8=
-github.com/sprintframework/certmod v1.0.0/go.mod h1:k2A342vcGbvovwFbE1gIfg3sDskwR3hHvUvselGfnH0=
+github.com/sprintframework/certmod v1.0.1 h1:8zKU7r9R+5vXmzLFfVH2RMmFJLvC8ZQ8WSySc4DT+hw=
+github.com/sprintframework/certmod v1.0.1/go.mod h1:k2A342vcGbvovwFbE1gIfg3sDskwR3hHvUvselGfnH0=
 github.com/sprintframework/certpb v1.0.0 h1:CQoCUZolBblQ0uIKuoKfdQTMahngDoBvPicTn6oWg5Q=
 github.com/sprintframework/certpb v1.0.0/go.mod h1:4rixgAPCH6BAe4zJ6eSWFL6Y3eATpOghR14y6tDsCOw=
 github.com/sprintframework/dns v1.0.0 h1:bPZ8Tf8i2uUcbzkB1Muvl4LTEH/LrLKk/FblDShbmEs=

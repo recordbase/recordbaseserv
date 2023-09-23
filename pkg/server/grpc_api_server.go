@@ -54,7 +54,7 @@ type implAPIServer struct {
 	RaftServer            raftapi.RaftServer      `inject`
 	RaftClientPool        raftapi.RaftClientPool  `inject`
 
-	TransactionalManager  store.TransactionalManager  `inject:"bean=record-storage"`
+	TransactionalManager  store.TransactionalManager  `inject:"bean=record-store"`
 
 	RaftTimeout      time.Duration   `value:"raft.timeout,default=10s"`
 

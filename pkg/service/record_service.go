@@ -33,8 +33,8 @@ type implRecordService struct {
 
 	Log             *zap.Logger          `inject`
 
-	RecordStore          store.ManagedDataStore     `inject:"bean=record-storage"`
-	TransactionalManager store.TransactionalManager `inject:"bean=record-storage"`
+	RecordStore          store.ManagedDataStore     `inject:"bean=record-store"`
+	TransactionalManager store.TransactionalManager `inject:"bean=record-store"`
 
 	DeleteGracePeriod        int  `value:"record.delete-grace-period,default=45"`
 	StripUnknownChars        bool `value:"record.strip-unknown-chars,default=false"`

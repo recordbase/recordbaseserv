@@ -19,11 +19,11 @@ require (
 	github.com/keyvalstore/store v1.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
-	github.com/sprintframework/certmod v1.0.0
+	github.com/sprintframework/certmod v1.0.1
 	github.com/sprintframework/dnsmod v1.0.0
 	github.com/sprintframework/natmod v1.0.1
 	github.com/sprintframework/raftapi v1.2.11
-	github.com/sprintframework/raftmod v1.2.11-1
+	github.com/sprintframework/raftmod v1.2.11-2
 	github.com/sprintframework/raftpb v1.2.10
 	github.com/sprintframework/sealmod v1.0.0
 	github.com/sprintframework/sprint v1.3.8

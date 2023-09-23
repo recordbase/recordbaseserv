@@ -24,7 +24,7 @@ type implRaftService struct {
 
 	Log             *zap.Logger          `inject`
 
-	RecordStore   store.ManagedDataStore `inject:"bean=record-storage"`
+	RecordStore   store.ManagedDataStore `inject:"bean=record-store"`
 	RecordService api.RecordService      `inject`
 }
 
