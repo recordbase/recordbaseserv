@@ -2,11 +2,11 @@ module github.com/recordbase/recordbaseserv
 
 go 1.17
 
-replace github.com/sprintframework/raftmod => ../../sprintframework/raftmod
+//replace github.com/sprintframework/raftmod => ../../sprintframework/raftmod
 
-replace github.com/hashicorp/serf => ../../hashicorp/serf
+//replace github.com/hashicorp/serf => ../../hashicorp/serf
 
-replace github.com/sprintframework/sprintframework => ../../sprintframework/sprintframework
+//replace github.com/sprintframework/sprintframework => ../../sprintframework/sprintframework
 
 require (
 	github.com/codeallergy/glue v1.1.1
