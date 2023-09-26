@@ -9,7 +9,7 @@ go 1.17
 //replace github.com/sprintframework/sprintframework => ../../sprintframework/sprintframework
 
 require (
-	github.com/codeallergy/glue v1.1.1
+	github.com/codeallergy/glue v1.1.3
 	github.com/codeallergy/go-bindata v1.0.0
 	github.com/go-errors/errors v1.4.2
 	github.com/golang/protobuf v1.5.2
@@ -19,15 +19,15 @@ require (
 	github.com/keyvalstore/store v1.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/recordbase/recordbasepb v1.3.0
-	github.com/sprintframework/certmod v1.0.1
-	github.com/sprintframework/dnsmod v1.0.0
-	github.com/sprintframework/natmod v1.0.1
-	github.com/sprintframework/raftapi v1.2.11
-	github.com/sprintframework/raftmod v1.2.11-2
+	github.com/sprintframework/certmod v1.0.2
+	github.com/sprintframework/dnsmod v1.0.2
+	github.com/sprintframework/natmod v1.0.2
+	github.com/sprintframework/raftapi v1.2.12
+	github.com/sprintframework/raftmod v1.2.12-1
 	github.com/sprintframework/raftpb v1.2.10
-	github.com/sprintframework/sealmod v1.0.0
-	github.com/sprintframework/sprint v1.3.12
-	github.com/sprintframework/sprintframework v1.3.12
+	github.com/sprintframework/sealmod v1.0.2
+	github.com/sprintframework/sprint v1.3.14
+	github.com/sprintframework/sprintframework v1.3.14
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0
@@ -107,12 +107,12 @@ require (
 	github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
-	github.com/sprintframework/cert v1.0.0 // indirect
+	github.com/sprintframework/cert v1.0.2 // indirect
 	github.com/sprintframework/certpb v1.0.0 // indirect
-	github.com/sprintframework/dns v1.0.0 // indirect
-	github.com/sprintframework/nat v1.0.0 // indirect
+	github.com/sprintframework/dns v1.0.2 // indirect
+	github.com/sprintframework/nat v1.0.2 // indirect
 	github.com/sprintframework/raft-badger v1.2.2 // indirect
-	github.com/sprintframework/seal v1.0.0 // indirect
+	github.com/sprintframework/seal v1.0.2 // indirect
 	github.com/sprintframework/sprintpb v1.3.0 // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
 	go.opencensus.io v0.24.0 // indirect

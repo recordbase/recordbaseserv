@@ -44,18 +44,18 @@ func doMain() (err error) {
 	sprintutils.PanicToError(&err)
 
 	beans := []interface{} {
-		sprintapp.ApplicationScanner(
-			AppResources,
-			sprintcmd.DefaultCommands,
-			/*raftgrpc.RaftCommand(), */
-			raftcmd.Scan),
+		sprintapp.ApplicationBeans,
+		sprintcmd.ApplicationCommands,
+		raftcmd.RaftCommands,
+
+		AppResources,
 
 		glue.Child(sprint.CoreRole,
-			sprintcore.CoreScanner(),
-			natmod.Scanner(),
-			dnsmod.Scanner(),
-			sealmod.Scanner(),
-			certmod.Scanner(),
+			sprintcore.CoreServices,
+			natmod.NatServices,
+			dnsmod.DNSServices,
+			sealmod.SealServices,
+			certmod.CertServices,
 			sprintcore.BadgerStoreFactory("config-store"),
 			sprintcore.BadgerStoreFactory("record-store"),
 			sprintcore.BadgerStoreFactory("raft-store"),
@@ -72,7 +72,7 @@ func doMain() (err error) {
 			glue.Child(sprint.ServerRole,
 				sprintserver.GrpcServerScanner("api-grpc-server"),
 				server.APIServer(),
-				raftmod.Scan,
+				raftmod.RaftServices,
 				//raftgrpc.RaftGrpcServer(),
 				sprintserver.HttpServerFactory("api-gateway-server"),
 				sprintserver.TlsConfigFactory("tls-config"),
@@ -80,7 +80,7 @@ func doMain() (err error) {
 
 		),
 		glue.Child(sprint.ControlClientRole,
-			sprintclient.ControlClientScanner(),
+			sprintclient.ControlClientBeans,
 			sprintclient.AnyTlsConfigFactory("tls-config"),
 		),
 		glue.Child("api",
