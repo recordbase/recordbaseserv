@@ -16,7 +16,7 @@ import (
 	"github.com/recordbase/recordbaseserv/pkg/pb"
 	"github.com/recordbase/recordbasepb"
 	"github.com/sprintframework/sprint"
-	"github.com/sprintframework/sprintframework/pkg/util"
+	"github.com/sprintframework/sprintframework/sprintutils"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -70,7 +70,7 @@ func (t *implAPIServer) PostConstruct() error {
 	recordbasepb.RegisterRecordServiceServer(t.GrpcServer, t)
 	pb.RegisterAdminServiceServer(t.GrpcServer, t) // no gateway
 
-	api, err := util.FindGatewayHandler(t.APIGatewayServer, "/api/")
+	api, err := sprintutils.FindGatewayHandler(t.APIGatewayServer, "/api/")
 	if err != nil {
 		return err
 	}

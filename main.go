@@ -8,7 +8,6 @@ package main
 import (
 	"fmt"
 	"github.com/codeallergy/glue"
-	"github.com/pkg/errors"
 	"github.com/recordbase/recordbaseserv/pkg/resources"
 	"github.com/recordbase/recordbaseserv/pkg/server"
 	"github.com/recordbase/recordbaseserv/pkg/service"
@@ -18,11 +17,13 @@ import (
 	"github.com/sprintframework/raftmod"
 	"github.com/sprintframework/raftmod/raftcmd"
 	"github.com/sprintframework/sealmod"
-	"github.com/sprintframework/sprintframework/pkg/app"
-	sprintclient "github.com/sprintframework/sprintframework/pkg/client"
-	sprintcmd "github.com/sprintframework/sprintframework/pkg/cmd"
-	sprintcore "github.com/sprintframework/sprintframework/pkg/core"
-	sprintserver "github.com/sprintframework/sprintframework/pkg/server"
+	"github.com/sprintframework/sprint"
+	"github.com/sprintframework/sprintframework/sprintapp"
+	"github.com/sprintframework/sprintframework/sprintclient"
+	"github.com/sprintframework/sprintframework/sprintcmd"
+	"github.com/sprintframework/sprintframework/sprintcore"
+	"github.com/sprintframework/sprintframework/sprintserver"
+	"github.com/sprintframework/sprintframework/sprintutils"
 	"os"
 	"time"
 )
@@ -40,24 +41,17 @@ var AppResources = &glue.ResourceSource{
 
 func doMain() (err error) {
 
-	defer func() {
-		if r := recover(); r != nil {
-			switch v := r.(type) {
-			case error:
-				err = v
-			case string:
-				err = errors.New(v)
-			default:
-				err = errors.Errorf("%v", v)
-			}
-		}
-	}()
+	sprintutils.PanicToError(&err)
 
-	return app.Application("recordbase",
-		app.WithVersion(Version),
-		app.WithBuild(Build),
-		app.Beans(app.DefaultApplicationBeans, AppResources, sprintcmd.DefaultCommands, /*raftgrpc.RaftCommand(), */raftcmd.Scan),
-		app.Core(sprintcore.CoreScanner(
+	beans := []interface{} {
+		sprintapp.ApplicationScanner(
+			AppResources,
+			sprintcmd.DefaultCommands,
+			/*raftgrpc.RaftCommand(), */
+			raftcmd.Scan),
+
+		glue.Child(sprint.CoreRole,
+			sprintcore.CoreScanner(),
 			natmod.Scanner(),
 			dnsmod.Scanner(),
 			sealmod.Scanner(),
@@ -68,30 +62,38 @@ func doMain() (err error) {
 			sprintcore.LumberjackFactory(),
 			sprintcore.AutoupdateService(),
 			service.Scan,
-		)),
-		app.Server(sprintserver.ServerScanner(
-			sprintserver.AuthorizationMiddleware(),
-			sprintserver.GrpcServerFactory("control-grpc-server"),
-			sprintserver.ControlServer(),
-			sprintserver.TlsConfigFactory("tls-config"),
-		)),
-		app.Client(sprintclient.ControlClientScanner(
+
+			glue.Child(sprint.ServerRole,
+				sprintserver.GrpcServerScanner("control-grpc-server"),
+				sprintserver.ControlServer(),
+				sprintserver.TlsConfigFactory("tls-config"),
+			),
+
+			glue.Child(sprint.ServerRole,
+				sprintserver.GrpcServerScanner("api-grpc-server"),
+				server.APIServer(),
+				raftmod.Scan,
+				//raftgrpc.RaftGrpcServer(),
+				sprintserver.HttpServerFactory("api-gateway-server"),
+				sprintserver.TlsConfigFactory("tls-config"),
+			),
+
+		),
+		glue.Child(sprint.ControlClientRole,
+			sprintclient.ControlClientScanner(),
 			sprintclient.AnyTlsConfigFactory("tls-config"),
-		)),
-		app.Server(sprintserver.ServerScanner(
-			sprintserver.AuthorizationMiddleware(),
-			sprintserver.GrpcServerFactory("api-grpc-server"),
-			server.APIServer(),
-			raftmod.Scan,
-			//raftgrpc.RaftGrpcServer(),
-			sprintserver.HttpServerFactory("api-gateway-server"),
-			sprintserver.TlsConfigFactory("tls-config"),
-		)),
-		app.Client(sprintclient.ClientScanner("api",
+		),
+		glue.Child("api",
 			sprintclient.GrpcClientFactory("api-grpc-client"),
 			sprintclient.AnyTlsConfigFactory("tls-config"),
-		)),
-	).Run(os.Args[1:])
+		),
+	}
+
+	return sprintapp.Application("recordbase",
+		sprintapp.WithVersion(Version),
+		sprintapp.WithBuild(Build),
+		sprintapp.WithBeans(beans)).
+	    Run(os.Args[1:])
 
 }
 

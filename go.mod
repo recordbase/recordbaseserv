@@ -9,7 +9,7 @@ replace github.com/hashicorp/serf => ../../hashicorp/serf
 replace github.com/sprintframework/sprintframework => ../../sprintframework/sprintframework
 
 require (
-	github.com/codeallergy/glue v1.1.0
+	github.com/codeallergy/glue v1.1.1
 	github.com/codeallergy/go-bindata v1.0.0
 	github.com/go-errors/errors v1.4.2
 	github.com/golang/protobuf v1.5.2
@@ -26,8 +26,8 @@ require (
 	github.com/sprintframework/raftmod v1.2.11-2
 	github.com/sprintframework/raftpb v1.2.10
 	github.com/sprintframework/sealmod v1.0.0
-	github.com/sprintframework/sprint v1.3.8
-	github.com/sprintframework/sprintframework v1.3.8-2
+	github.com/sprintframework/sprint v1.3.12
+	github.com/sprintframework/sprintframework v1.3.12
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0

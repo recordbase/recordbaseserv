@@ -7,7 +7,7 @@ package service
 
 import (
 	"context"
-	"github.com/sprintframework/sprintframework/pkg/util"
+	"github.com/sprintframework/sprintframework/sprintutils"
 	"github.com/recordbase/recordbasepb"
 )
 
@@ -45,7 +45,7 @@ func (t *implRecordService) allocateId(ctx context.Context, tenant string) (user
 			continue
 		}
 
-		userId = util.EncodeId(uint64(r.FirstKey))
+		userId = sprintutils.EncodeId(uint64(r.FirstKey))
 		r.FirstKey++
 		if r.LastKey < r.FirstKey {
 			entity.Ranges = entity.Ranges[1:]
